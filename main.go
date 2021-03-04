@@ -17,6 +17,8 @@ func main() {
 		fileName      string
 		isCorrectFile bool
 		printWidth    int
+		imgWidth      int
+		imgHeight     int
 	)
 
 	cwd, err := os.Getwd()
@@ -60,14 +62,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	imgData = transform.Resize(imgData, printWidth, printWidth*45/100, transform.Linear)
+	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*45/100, transform.Linear)
+
+	imgWidth = imgData.Bounds().Max.X
+	imgHeight = imgData.Bounds().Max.Y
 
 	/////////////////////////////////////////////////////////
 
 	pixels := []string{" ", "░", "▒", "▓", "█"}
 
-	for y := imgData.Bounds().Min.Y; y < imgData.Bounds().Max.Y; y++ {
-		for x := imgData.Bounds().Min.X; x < imgData.Bounds().Max.X; x++ {
+	for y := 0; y < imgHeight; y++ {
+		for x := 0; x < imgWidth; x++ {
 			c := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
 
 			pixel := c.Y / 51
@@ -79,6 +84,6 @@ func main() {
 			fmt.Print(pixels[pixel])
 		}
 
-		fmt.Print("\n")
+		fmt.Println()
 	}
 }
