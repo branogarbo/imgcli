@@ -21,11 +21,6 @@ func main() {
 		imgHeight     int
 	)
 
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
 	flag.Parse()
 
@@ -49,7 +44,7 @@ func main() {
 
 	/////////////////////////////////////////////////////////
 
-	imgFilePath := filepath.Join(cwd, fileName)
+	imgFilePath := filepath.Join(fileName)
 
 	img, err := os.Open(imgFilePath)
 	if err != nil {
