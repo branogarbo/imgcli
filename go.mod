@@ -1,4 +1,4 @@
-module sandbox/imgProc
+module jpg4cli
 
 go 1.15
 
