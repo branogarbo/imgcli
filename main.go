@@ -3,25 +3,33 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image/color"
 	"image/jpeg"
+	"io"
+	"jpg4cli/util"
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/anthonynsimon/bild/transform"
 )
 
 func main() {
 	var (
-		fileName      string
+		file          string
 		isCorrectFile bool
-		printWidth    int
 		imgWidth      int
 		imgHeight     int
+		printWidth    int
+		img           io.ReadCloser
+		isWebImg      bool
+		isAscii       bool
 	)
 
+	// process flags/args
+
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
+	flag.BoolVar(&isWebImg, "web", false, "whether or not the image is in the filesystem or fetched from the web")
+	flag.BoolVar(&isAscii, "ascii", false, "whether or not the the image will be printed as ascii")
+
 	flag.Parse()
 
 	if len(os.Args) == 1 {
@@ -29,26 +37,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	if len(flag.Args()) == 0 {
-		fileName = os.Args[1]
-	} else {
-		fileName = flag.Args()[0]
-	}
+	file = flag.Args()[0]
 
-	isCorrectFile = fileName[len(fileName)-3:] == "jpg" || fileName[len(fileName)-4:] == "jpeg"
+	isCorrectFile = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg"
 
 	if !isCorrectFile {
-		fmt.Println("please provide a jpg or jpeg file to print")
+		fmt.Println("please provide a jpg or jpeg source to print")
 		os.Exit(1)
 	}
 
-	/////////////////////////////////////////////////////////
+	// process image
 
-	imgFilePath := filepath.Join(fileName)
-
-	img, err := os.Open(imgFilePath)
-	if err != nil {
-		log.Fatal(err)
+	if isWebImg {
+		img = util.GetImgByUrl(file)
+	} else {
+		img = util.GetImgByFilePath(file)
 	}
 	defer img.Close()
 
@@ -62,23 +65,16 @@ func main() {
 	imgWidth = imgData.Bounds().Max.X
 	imgHeight = imgData.Bounds().Max.Y
 
-	/////////////////////////////////////////////////////////
+	// draw image
 
-	pixels := []string{" ", "░", "▒", "▓", "█"}
-
-	for y := 0; y < imgHeight; y++ {
-		for x := 0; x < imgWidth; x++ {
-			c := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
-
-			pixel := c.Y / 51
-
-			if pixel == 5 {
-				pixel--
-			}
-
-			fmt.Print(pixels[pixel])
-		}
-
-		fmt.Println()
-	}
+	util.DrawPixels(imgData, imgWidth, imgHeight, isAscii)
 }
+
+// NEXT STEPS:
+// FEATURES:
+// WRITE TO TEXT FILE
+// PROVIDE MODE FLAG (BLOCKS, ASCII)
+// ALLOW REMOTE IMG FETCHING
+//
+// IMPROVEMENTS:
+// FLAGS/ARGS ERROR HANDLING
