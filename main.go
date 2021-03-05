@@ -44,6 +44,11 @@ func main() {
 
 	file = flag.Args()[0]
 
+	if len(file) < 3 {
+		fmt.Println("please provide a jpg/png file or an image address(url) to print")
+		os.Exit(1)
+	}
+
 	isJpg = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg"
 	isPng = file[len(file)-3:] == "png"
 
