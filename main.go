@@ -38,7 +38,7 @@ func main() {
 	flag.BoolVar(&isWebImg, "web", false, "whether or not the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isAscii, "ascii", false, "whether or not the the image will be printed as ascii")
 	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the image will be written to a text file")
-	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the image will be written to a text file")
+	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the image will be inverted")
 
 	flag.Parse()
 
