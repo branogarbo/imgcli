@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image"
 	"image/jpeg"
+	"image/png"
 	"io"
 	"jpg4cli/util"
 	"log"
@@ -14,14 +16,17 @@ import (
 
 func main() {
 	var (
-		file          string
-		isCorrectFile bool
-		imgWidth      int
-		imgHeight     int
-		printWidth    int
-		img           io.ReadCloser
-		isWebImg      bool
-		isAscii       bool
+		file       string
+		isJpg      bool
+		isPng      bool
+		imgWidth   int
+		imgHeight  int
+		printWidth int
+		isWebImg   bool
+		isAscii    bool
+		img        io.ReadCloser
+		imgData    image.Image
+		err        error
 	)
 
 	// process flags/args
@@ -33,16 +38,17 @@ func main() {
 	flag.Parse()
 
 	if len(os.Args) == 1 {
-		fmt.Println("please provide a jpg or jpeg file to print")
+		fmt.Println("please provide a jpg or png file to print")
 		os.Exit(1)
 	}
 
 	file = flag.Args()[0]
 
-	isCorrectFile = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg"
+	isJpg = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg"
+	isPng = file[len(file)-3:] == "png"
 
-	if !isCorrectFile {
-		fmt.Println("please provide a jpg or jpeg source to print")
+	if !(isJpg || isPng) {
+		fmt.Println("please provide a jpg or png source to print")
 		os.Exit(1)
 	}
 
@@ -55,7 +61,12 @@ func main() {
 	}
 	defer img.Close()
 
-	imgData, err := jpeg.Decode(img)
+	if isJpg {
+		imgData, err = jpeg.Decode(img)
+	} else {
+		imgData, err = png.Decode(img)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,10 +82,9 @@ func main() {
 }
 
 // NEXT STEPS:
+
 // FEATURES:
 // WRITE TO TEXT FILE
-// PROVIDE MODE FLAG (BLOCKS, ASCII)
-// ALLOW REMOTE IMG FETCHING
 //
 // IMPROVEMENTS:
 // FLAGS/ARGS ERROR HANDLING
