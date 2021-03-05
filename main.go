@@ -49,8 +49,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	isJpg = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg"
-	isPng = file[len(file)-3:] == "png"
+	isJpg = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg" || file[len(file)-3:] == "JPG" || file[len(file)-4:] == "JPEG"
+	isPng = file[len(file)-3:] == "png" || file[len(file)-3:] == "PNG"
 
 	if !(isJpg || isPng) {
 		fmt.Println("please provide a jpg/png file or an image address(url) to print")
