@@ -28,28 +28,59 @@ func GetImgByFilePath(file string) io.ReadCloser {
 	return img
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isAscii bool) {
-	var pixels []string
+func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isAscii, isPrintSaved bool, printSaveTo string, isPrintInverted bool) {
+	var (
+		pixelLevel  []string
+		pixelString string
+		pixel       uint8
+	)
 
 	if isAscii {
-		pixels = []string{" ", ".", ",", "~", "#"}
+		pixelLevel = []string{" ", ".", ",", "~", "#"}
 	} else {
-		pixels = []string{" ", "░", "▒", "▓", "█"}
+		pixelLevel = []string{" ", "░", "▒", "▓", "█"}
 	}
 
 	for y := 0; y < imgHeight; y++ {
 		for x := 0; x < imgWidth; x++ {
 			c := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
 
-			pixel := c.Y / 51
+			if isPrintInverted {
+				pixel = (255 - c.Y) / 51 // gives different vals when simplified to 5 - c.Y/51
+			} else {
+				pixel = c.Y / 51
+			}
 
 			if pixel == 5 {
 				pixel--
 			}
 
-			fmt.Print(pixels[pixel])
+			if isPrintSaved {
+				pixelString += pixelLevel[pixel]
+			} else {
+				fmt.Print(pixelLevel[pixel])
+			}
 		}
 
-		fmt.Println()
+		if isPrintSaved {
+			pixelString += "\n"
+		} else {
+			fmt.Println()
+		}
+	}
+
+	if isPrintSaved {
+		file, err := os.Create(printSaveTo)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer file.Close()
+
+		_, err = file.WriteString(pixelString)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println("done. saved to", printSaveTo)
 	}
 }

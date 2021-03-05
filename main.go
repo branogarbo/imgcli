@@ -16,17 +16,20 @@ import (
 
 func main() {
 	var (
-		file       string
-		isJpg      bool
-		isPng      bool
-		imgWidth   int
-		imgHeight  int
-		printWidth int
-		isWebImg   bool
-		isAscii    bool
-		img        io.ReadCloser
-		imgData    image.Image
-		err        error
+		file            string
+		isJpg           bool
+		isPng           bool
+		imgWidth        int
+		imgHeight       int
+		printWidth      int
+		isWebImg        bool
+		isAscii         bool
+		err             error
+		img             io.ReadCloser
+		imgData         image.Image
+		isPrintSaved    bool
+		printSaveTo     string
+		isPrintInverted bool
 	)
 
 	// process flags/args
@@ -34,6 +37,8 @@ func main() {
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
 	flag.BoolVar(&isWebImg, "web", false, "whether or not the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isAscii, "ascii", false, "whether or not the the image will be printed as ascii")
+	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the image will be written to a text file")
+	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the image will be written to a text file")
 
 	flag.Parse()
 
@@ -43,6 +48,14 @@ func main() {
 	}
 
 	file = flag.Args()[0]
+
+	if isPrintSaved {
+		if len(flag.Args()) == 1 {
+			printSaveTo = "print.txt"
+		} else {
+			printSaveTo = flag.Args()[1]
+		}
+	}
 
 	if len(file) < 3 {
 		fmt.Println("please provide a jpg/png file or an image address(url) to print")
@@ -83,13 +96,5 @@ func main() {
 
 	// draw image
 
-	util.DrawPixels(imgData, imgWidth, imgHeight, isAscii)
+	util.DrawPixels(imgData, imgWidth, imgHeight, isAscii, isPrintSaved, printSaveTo, isPrintInverted)
 }
-
-// NEXT STEPS:
-
-// FEATURES:
-// WRITE TO TEXT FILE
-//
-// IMPROVEMENTS:
-// FLAGS/ARGS ERROR HANDLING
