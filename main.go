@@ -38,7 +38,7 @@ func main() {
 	flag.Parse()
 
 	if len(os.Args) == 1 {
-		fmt.Println("please provide a jpg or png file to print")
+		fmt.Println("please provide a jpg/png file or an image address(url) to print")
 		os.Exit(1)
 	}
 
@@ -48,7 +48,7 @@ func main() {
 	isPng = file[len(file)-3:] == "png"
 
 	if !(isJpg || isPng) {
-		fmt.Println("please provide a jpg or png source to print")
+		fmt.Println("please provide a jpg/png file or an image address(url) to print")
 		os.Exit(1)
 	}
 
