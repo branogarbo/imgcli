@@ -6,8 +6,8 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"imgcli/util"
 	"io"
-	"jpg4cli/util"
 	"log"
 	"os"
 
