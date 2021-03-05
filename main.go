@@ -35,10 +35,10 @@ func main() {
 	// process flags/args
 
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
-	flag.BoolVar(&isWebImg, "web", false, "whether or not the image is in the filesystem or fetched from the web")
+	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isAscii, "ascii", false, "whether or not the the image will be printed as ascii")
-	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the image will be written to a text file")
-	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the image will be inverted")
+	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
+	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
 
 	flag.Parse()
 
