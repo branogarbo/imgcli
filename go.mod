@@ -1,4 +1,4 @@
-module jpg4cli
+module imgcli
 
 go 1.15
 
