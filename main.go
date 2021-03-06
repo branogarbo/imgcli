@@ -69,7 +69,7 @@ func main() {
 	}
 	defer img.Close()
 
-	imgData, imgType, err = image.Decode(img)
+	imgData, _, err = image.Decode(img)
 	if err != nil {
 		log.Fatal(err)
 	}
