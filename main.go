@@ -89,7 +89,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*45/100, transform.Linear)
+	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*9/20, transform.Linear)
 
 	imgWidth = imgData.Bounds().Max.X
 	imgHeight = imgData.Bounds().Max.Y
