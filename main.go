@@ -28,7 +28,6 @@ func main() {
 		isPrintSaved    bool
 		printSaveTo     string
 		isPrintInverted bool
-		imgType         string
 	)
 
 	// process flags/args
