@@ -49,7 +49,7 @@ func main() {
 
 	if isPrintSaved {
 		if len(flag.Args()) == 1 {
-			printSaveTo = "print.txt"
+			printSaveTo = "./print.txt"
 		} else {
 			printSaveTo = flag.Args()[1]
 		}

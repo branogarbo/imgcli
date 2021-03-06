@@ -1,2 +1,2 @@
-# jpg4cli
-A simple Go program that prints JPG and PNG images to the command line and more.
+# imgcli
+A simple Go program that prints images to the command line and more.
