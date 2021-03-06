@@ -71,7 +71,6 @@ func main() {
 	defer img.Close()
 
 	imgData, imgType, err = image.Decode(img)
-	fmt.Println(imgType)
 	if err != nil {
 		log.Fatal(err)
 	}
