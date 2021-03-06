@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"image"
-	"image/jpeg"
-	"image/png"
+	_ "image/jpeg"
+	_ "image/png"
 	"imgcli/util"
 	"io"
 	"log"
@@ -17,8 +17,6 @@ import (
 func main() {
 	var (
 		file            string
-		isJpg           bool
-		isPng           bool
 		imgWidth        int
 		imgHeight       int
 		printWidth      int
@@ -30,6 +28,7 @@ func main() {
 		isPrintSaved    bool
 		printSaveTo     string
 		isPrintInverted bool
+		imgType         string
 	)
 
 	// process flags/args
@@ -43,7 +42,7 @@ func main() {
 	flag.Parse()
 
 	if len(os.Args) == 1 {
-		fmt.Println("please provide a jpg/png file or an image address(url) to print")
+		fmt.Println("please provide an image file or address(url) to print")
 		os.Exit(1)
 	}
 
@@ -58,15 +57,7 @@ func main() {
 	}
 
 	if len(file) < 3 {
-		fmt.Println("please provide a jpg/png file or an image address(url) to print")
-		os.Exit(1)
-	}
-
-	isJpg = file[len(file)-3:] == "jpg" || file[len(file)-4:] == "jpeg" || file[len(file)-3:] == "JPG" || file[len(file)-4:] == "JPEG"
-	isPng = file[len(file)-3:] == "png" || file[len(file)-3:] == "PNG"
-
-	if !(isJpg || isPng) {
-		fmt.Println("please provide a jpg/png file or an image address(url) to print")
+		fmt.Println("please provide an image file or address(url) to print")
 		os.Exit(1)
 	}
 
@@ -79,12 +70,8 @@ func main() {
 	}
 	defer img.Close()
 
-	if isJpg {
-		imgData, err = jpeg.Decode(img)
-	} else {
-		imgData, err = png.Decode(img)
-	}
-
+	imgData, imgType, err = image.Decode(img)
+	fmt.Println(imgType)
 	if err != nil {
 		log.Fatal(err)
 	}
