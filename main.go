@@ -36,12 +36,12 @@ func main() {
 	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
 	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
-	flag.StringVar(&printMode, "mode", "gray", "the mode the image will be printed in. (color, ascii, or gray)")
+	flag.StringVar(&printMode, "mode", "box", "the mode the image will be printed in. (color, ascii, or box)")
 
 	flag.Parse()
 
-	if printMode != "gray" && printMode != "ascii" && printMode != "color" {
-		fmt.Println("please provide a valid print mode (color, ascii, or gray)")
+	if printMode != "box" && printMode != "ascii" && printMode != "color" {
+		fmt.Println("please provide a valid print mode (color, ascii, or box)")
 		os.Exit(1)
 	}
 

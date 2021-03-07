@@ -47,7 +47,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			os.Exit(1)
 		}
 	}
-	if printMode == "gray" {
+	if printMode == "box" {
 		pixelLevel = []string{" ", "░", "▒", "▓", "█"}
 	}
 	if printMode == "ascii" {
