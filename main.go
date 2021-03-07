@@ -21,24 +21,29 @@ func main() {
 		imgHeight       int
 		printWidth      int
 		isWebImg        bool
-		isAscii         bool
 		err             error
 		img             io.ReadCloser
 		imgData         image.Image
 		isPrintSaved    bool
 		printSaveTo     string
 		isPrintInverted bool
+		printMode       string
 	)
 
 	// process flags/args
 
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
 	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
-	flag.BoolVar(&isAscii, "ascii", false, "whether or not the the image will be printed as ascii")
 	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
 	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
+	flag.StringVar(&printMode, "mode", "gray", "the mode the image will be printed in. (color, ascii, or gray)")
 
 	flag.Parse()
+
+	if printMode != "gray" && printMode != "ascii" && printMode != "color" {
+		fmt.Println("please provide a valid print mode (color, ascii, or gray)")
+		os.Exit(1)
+	}
 
 	if len(os.Args) == 1 {
 		fmt.Println("please provide an image file or address(url) to print")
@@ -48,10 +53,15 @@ func main() {
 	file = flag.Args()[0]
 
 	if isPrintSaved {
-		if len(flag.Args()) == 1 {
-			printSaveTo = "./print.txt"
+		if printMode == "color" {
+			fmt.Println("cannot save print in color mode.")
+			os.Exit(1)
 		} else {
-			printSaveTo = flag.Args()[1]
+			if len(flag.Args()) == 1 {
+				printSaveTo = "./print.txt"
+			} else {
+				printSaveTo = flag.Args()[1]
+			}
 		}
 	}
 
@@ -81,5 +91,5 @@ func main() {
 
 	// draw image
 
-	util.DrawPixels(imgData, imgWidth, imgHeight, isAscii, isPrintSaved, printSaveTo, isPrintInverted)
+	util.DrawPixels(imgData, imgWidth, imgHeight, isPrintSaved, printSaveTo, isPrintInverted, printMode)
 }

@@ -8,6 +8,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
+
+	pcolor "github.com/gookit/color"
 )
 
 func GetImgByUrl(url string) io.ReadCloser {
@@ -28,27 +31,44 @@ func GetImgByFilePath(file string) io.ReadCloser {
 	return img
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isAscii, isPrintSaved bool, printSaveTo string, isPrintInverted bool) {
+func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode string) {
 	var (
 		pixelLevel  []string
 		pixelString string
 		pixel       uint8
+		colored     bool
 	)
 
-	if isAscii {
-		pixelLevel = []string{" ", ".", ",", "~", "#"}
-	} else {
+	if printMode == "color" {
+		if runtime.GOOS == "windows" {
+			colored = true
+		} else {
+			fmt.Println("colors not supported.")
+			os.Exit(1)
+		}
+	}
+	if printMode == "gray" {
 		pixelLevel = []string{" ", "░", "▒", "▓", "█"}
+	}
+	if printMode == "ascii" {
+		pixelLevel = []string{" ", ".", ",", "~", "#"}
 	}
 
 	for y := 0; y < imgHeight; y++ {
 		for x := 0; x < imgWidth; x++ {
-			c := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
+			l := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
+			r, g, b, _ := imgData.At(x, y).RGBA()
 
 			if isPrintInverted {
-				pixel = (255 - c.Y) / 51 // gives different vals when simplified to 5 - c.Y/51
+				if colored {
+					r = 255 - r
+					g = 255 - g
+					b = 255 - b
+				} else {
+					pixel = (255 - l.Y) / 51 // gives different vals when simplified to 5 - c.Y/51
+				}
 			} else {
-				pixel = c.Y / 51
+				pixel = l.Y / 51
 			}
 
 			if pixel == 5 {
@@ -58,7 +78,11 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isAscii, isPrintSa
 			if isPrintSaved {
 				pixelString += pixelLevel[pixel]
 			} else {
-				fmt.Print(pixelLevel[pixel])
+				if colored {
+					pcolor.RGB(uint8(r), uint8(g), uint8(b), true).Print(" ")
+				} else {
+					fmt.Print(pixelLevel[pixel])
+				}
 			}
 		}
 
