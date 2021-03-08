@@ -8,7 +8,6 @@ import (
 	_ "image/png"
 	"imgcli/util"
 	"io"
-	"log"
 	"os"
 
 	"github.com/anthonynsimon/bild/transform"
@@ -45,7 +44,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if len(os.Args) == 1 {
+	if len(flag.Args()) == 0 {
 		fmt.Println("please provide an image file or address(url) to print")
 		os.Exit(1)
 	}
@@ -81,7 +80,8 @@ func main() {
 
 	imgData, _, err = image.Decode(img)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*9/20, transform.Linear)

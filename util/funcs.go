@@ -5,7 +5,6 @@ import (
 	"image"
 	"image/color"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"runtime"
@@ -16,7 +15,8 @@ import (
 func GetImgByUrl(url string) io.ReadCloser {
 	res, err := http.Get(url)
 	if err != nil || res.StatusCode != 200 {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	return res.Body
@@ -25,7 +25,8 @@ func GetImgByUrl(url string) io.ReadCloser {
 func GetImgByFilePath(file string) io.ReadCloser {
 	img, err := os.Open(file)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	return img
@@ -96,13 +97,15 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	if isPrintSaved {
 		file, err := os.Create(printSaveTo)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 		defer file.Close()
 
 		_, err = file.WriteString(pixelString)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		fmt.Println("done. saved to", printSaveTo)
