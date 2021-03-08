@@ -15,18 +15,20 @@ import (
 
 func main() {
 	var (
-		file            string
-		imgWidth        int
-		imgHeight       int
-		printWidth      int
-		isWebImg        bool
-		err             error
-		img             io.ReadCloser
-		imgData         image.Image
-		isPrintSaved    bool
-		printSaveTo     string
-		isPrintInverted bool
-		printMode       string
+		file                string
+		imgWidth            int
+		imgHeight           int
+		printWidth          int
+		isWebImg            bool
+		err                 error
+		img                 io.ReadCloser
+		imgData             image.Image
+		isPrintSaved        bool
+		printSaveTo         string
+		isPrintInverted     bool
+		printMode           string
+		asciiPattern        string
+		defaultAsciiPattern string = " .-+*#%@"
 	)
 
 	// process flags/args
@@ -35,13 +37,22 @@ func main() {
 	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
 	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
-	flag.StringVar(&printMode, "mode", "box", "the mode the image will be printed in. (color, ascii, or box)")
+	flag.StringVar(&printMode, "mode", "ascii", "the mode the image will be printed in. (color, ascii, or box)")
+	flag.StringVar(&asciiPattern, "ascii", defaultAsciiPattern, "the pattern of ascii characters from least to greatest visibility. pattern of over 8 characters is not recommended")
 
 	flag.Parse()
 
-	if printMode != "box" && printMode != "ascii" && printMode != "color" {
+	switch printMode {
+	case "box":
+	case "ascii":
+	case "color":
+	default:
 		fmt.Println("please provide a valid print mode (color, ascii, or box)")
 		os.Exit(1)
+	}
+
+	if asciiPattern != defaultAsciiPattern {
+		printMode = "ascii"
 	}
 
 	if len(flag.Args()) == 0 {
@@ -91,5 +102,5 @@ func main() {
 
 	// draw image
 
-	util.DrawPixels(imgData, imgWidth, imgHeight, isPrintSaved, printSaveTo, isPrintInverted, printMode)
+	util.DrawPixels(imgData, imgWidth, imgHeight, isPrintSaved, printSaveTo, isPrintInverted, printMode, asciiPattern)
 }

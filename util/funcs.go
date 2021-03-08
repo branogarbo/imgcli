@@ -32,12 +32,34 @@ func GetImgByFilePath(file string) io.ReadCloser {
 	return img
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode string) {
+func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
+	if value > upperI || value < lowerI {
+		fmt.Println("given value is out of the inital range")
+		os.Exit(1)
+	}
+
+	initRange := upperI - lowerI
+	finalRange := upperF - lowerF + 1
+
+	rangeScale := finalRange / initRange
+	relativeValue := value - lowerI
+
+	scaledValue := relativeValue*rangeScale + lowerF
+
+	if scaledValue == upperF+1 {
+		scaledValue--
+	}
+
+	return int(scaledValue)
+}
+
+func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string) {
 	var (
-		pixelLevel  []string
-		pixelString string
-		pixel       uint8
-		colored     bool
+		pixelLevels     string
+		pixelLevel      int
+		pixelChar       string
+		pixelSaveString string
+		colored         bool
 	)
 
 	if printMode == "color" {
@@ -49,10 +71,10 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		}
 	}
 	if printMode == "box" {
-		pixelLevel = []string{" ", "░", "▒", "▓", "█"}
+		pixelLevels = " ░▒▓█"
 	}
 	if printMode == "ascii" {
-		pixelLevel = []string{" ", ".", ",", "~", "#"}
+		pixelLevels = asciiPattern //  .:-=+*#%@
 	}
 
 	for y := 0; y < imgHeight; y++ {
@@ -66,29 +88,31 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 					g = 255 - g
 					b = 255 - b
 				} else {
-					pixel = (255 - l.Y) / 51 // gives different vals when simplified to 5 - c.Y/51
+					pixelLevel = len([]rune(pixelLevels)) - 1 - ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
 				}
 			} else {
-				pixel = l.Y / 51
+				pixelLevel = ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
 			}
 
-			if pixel == 5 {
-				pixel--
+			if colored {
+				pixelChar = " "
+			} else {
+				pixelChar = string([]rune(pixelLevels)[pixelLevel])
 			}
 
 			if isPrintSaved {
-				pixelString += pixelLevel[pixel]
+				pixelSaveString += pixelChar
 			} else {
 				if colored {
-					pcolor.RGB(uint8(r), uint8(g), uint8(b), true).Print(" ")
+					pcolor.RGB(uint8(r), uint8(g), uint8(b), true).Print(pixelChar)
 				} else {
-					fmt.Print(pixelLevel[pixel])
+					fmt.Print(pixelChar)
 				}
 			}
 		}
 
 		if isPrintSaved {
-			pixelString += "\n"
+			pixelSaveString += "\n"
 		} else {
 			fmt.Println()
 		}
@@ -102,7 +126,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		}
 		defer file.Close()
 
-		_, err = file.WriteString(pixelString)
+		_, err = file.WriteString(pixelSaveString)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
