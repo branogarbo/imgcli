@@ -1,19 +1,16 @@
 # 📷 **imgcli**
-A simple tool written in Go that prints images to the command line and more.
+**A simple tool written in Go that prints images to the command line and more.**
 
 <hr />
 
 ## 🔧 **Setup**
-...
-<!-- Clone this repo and build the binary,
+Install the binary with go:
+```
+go install github.com/branogarbo/imgcli@latest
 ```
 
-```
-or run go get
-```
-go get github.com/branogarbo/imgcli
-go build or go install
-``` -->
+Or get the pre-compiled binaries for your platform on the [releases page](https://github.com/branogarbo/imgcli/releases)
+
 
 ## 💻 **CLI usage**
 ```
