@@ -6,11 +6,11 @@ import (
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"imgcli/util"
 	"io"
 	"os"
 
 	"github.com/anthonynsimon/bild/transform"
+	"github.com/branogarbo/imgcli/util"
 )
 
 func main() {
