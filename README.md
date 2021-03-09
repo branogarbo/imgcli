@@ -1,7 +1,7 @@
 # 📷 **imgcli**
 **A simple tool written in Go that prints images to the command line and more.**
 
-<hr />
+---
 
 ## 🔧 **Setup**
 Install the binary with go:
