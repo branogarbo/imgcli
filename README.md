@@ -1,14 +1,21 @@
-# **imgcli**
+# 📷 **imgcli**
 A simple tool written in Go that prints images to the command line and more.
 
 <hr />
 
-## **Setup**
-```
-go get github.com/branogarbo/imgcli
+## 🔧 **Setup**
+...
+<!-- Clone this repo and build the binary,
 ```
 
-## **CLI usage**
+```
+or run go get
+```
+go get github.com/branogarbo/imgcli
+go build or go install
+``` -->
+
+## 💻 **CLI usage**
 ```
 imgcli
 

@@ -1,4 +1,4 @@
-module imgcli
+module github.com/branogarbo/imgcli
 
 go 1.15
 
