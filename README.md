@@ -24,7 +24,8 @@ Usage:
 
 Flags:
    -ascii string
-         the pattern of ascii characters from least to greatest visibility. pattern of over 8 characters is not recommended (default " .-+*#%@")
+         the pattern of ascii characters from least to greatest visibility. pattern of 
+         over 8 characters is not recommended (default " .-+*#%@")
    -invert
          whether or not the the print will be inverted
    -mode string
