@@ -33,12 +33,28 @@ func main() {
 
 	// process flags/args
 
+	usageString := `imgcli
+
+A simple tool written in Go that prints images to the command line and more.
+
+Usage:
+	imgcli [--mode=<mode>] [--width=<number>] [--invert] [--save] [--ascii] <path-to-image>
+	imgcli [--mode=<mode>] [--width=<number>] [--invert] [--save] [--ascii] [--web] "<image-url>"
+
+Flags:`
+
 	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
 	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
 	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
 	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
 	flag.StringVar(&printMode, "mode", "ascii", "the mode the image will be printed in. (color, ascii, or box)")
 	flag.StringVar(&asciiPattern, "ascii", defaultAsciiPattern, "the pattern of ascii characters from least to greatest visibility. pattern of over 8 characters is not recommended")
+
+	flag.Usage = func() {
+		fmt.Fprintln(os.Stderr, usageString)
+		flag.PrintDefaults()
+		fmt.Fprintln(os.Stderr, "\n\n", `Use "imgcli --help" or "imgcli -h" to view usage.`)
+	}
 
 	flag.Parse()
 
