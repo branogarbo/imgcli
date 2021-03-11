@@ -9,9 +9,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/cheggaaa/pb/v3"
 	printColor "github.com/gookit/color"
-	"github.com/gosuri/uiprogress"
-	progressBar "github.com/gosuri/uiprogress"
 )
 
 func GetImgByUrl(url string) io.ReadCloser {
@@ -62,7 +61,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		pixelChar       string
 		pixelSaveString string
 		colored         bool
-		pBar            *progressBar.Bar
+		progressBar     *pb.ProgressBar
 	)
 
 	if printMode == "color" {
@@ -81,11 +80,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	}
 
 	if isPrintSaved {
-		progressBar.Start()
-		pBar = progressBar.AddBar(imgWidth * imgHeight)
-
-		pBar.PrependElapsed()
-		pBar.AppendCompleted()
+		progressBar = pb.StartNew(imgWidth * imgHeight)
 	}
 
 	for y := 0; y < imgHeight; y++ {
@@ -112,7 +107,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			}
 
 			if isPrintSaved {
-				pBar.Incr()
+				progressBar.Increment()
 				pixelSaveString += pixelChar
 			} else {
 				if colored {
@@ -144,7 +139,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			os.Exit(1)
 		}
 
-		uiprogress.Stop()
+		progressBar.Finish()
 		fmt.Println("done. saved to", printSaveTo)
 	}
 }
