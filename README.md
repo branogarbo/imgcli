@@ -24,18 +24,18 @@ Usage:
 
 Flags:
    -ascii string
-         the pattern of ascii characters from least to greatest visibility. pattern of 
+         The pattern of ascii characters from least to greatest visibility. pattern of 
          over 8 characters is not recommended (default " .-+*#%@")
    -invert
-         whether or not the the print will be inverted
+         Whether or not the the print will be inverted
    -mode string
-         the mode the image will be printed in. (color, ascii, or box) (default "ascii")
+         The mode the image will be printed in. (color, ascii, or box) (default "ascii")
    -save
-         whether or not the the print will be written to a text file
+         Whether or not the the print will be written to a text file
    -web
-         whether the image is in the filesystem or fetched from the web
+         Whether the image is in the filesystem or fetched from the web
    -width int
-         the number of characters in each row of the printed image (default 100)
+         The number of characters in each row of the printed image (default 100)
 
 
 Use "imgcli --help" or "imgcli -h" to view flag usage.

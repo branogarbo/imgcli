@@ -35,7 +35,7 @@ func GetImgByFilePath(file string) io.ReadCloser {
 
 func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	if value > upperI || value < lowerI {
-		fmt.Println("given value is out of the inital range")
+		fmt.Println("Given value is out of the inital range")
 		os.Exit(1)
 	}
 
@@ -62,13 +62,14 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		pixelSaveString string
 		colored         bool
 		progressBar     *pb.ProgressBar
+		pbTemplate      string
 	)
 
 	if printMode == "color" {
 		if runtime.GOOS == "windows" {
 			colored = true
 		} else {
-			fmt.Println("colors not supported.")
+			fmt.Println("Color mode not supported.")
 			os.Exit(1)
 		}
 	}
@@ -80,7 +81,8 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	}
 
 	if isPrintSaved {
-		progressBar = pb.StartNew(imgWidth * imgHeight)
+		pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
+		progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
 	}
 
 	for y := 0; y < imgHeight; y++ {
@@ -140,6 +142,6 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		}
 
 		progressBar.Finish()
-		fmt.Println("done. saved to", printSaveTo)
+		fmt.Println("Done. Saved to", printSaveTo)
 	}
 }

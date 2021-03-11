@@ -43,12 +43,12 @@ Usage:
 
 Flags:`
 
-	flag.IntVar(&printWidth, "width", 100, "the number of characters in each row of the printed image")
-	flag.BoolVar(&isWebImg, "web", false, "whether the image is in the filesystem or fetched from the web")
-	flag.BoolVar(&isPrintSaved, "save", false, "whether or not the the print will be written to a text file")
-	flag.BoolVar(&isPrintInverted, "invert", false, "whether or not the the print will be inverted")
-	flag.StringVar(&printMode, "mode", "ascii", "the mode the image will be printed in. (color, ascii, or box)")
-	flag.StringVar(&asciiPattern, "ascii", defaultAsciiPattern, "the pattern of ascii characters from least to greatest visibility. pattern of over 8 characters is not recommended")
+	flag.IntVar(&printWidth, "width", 100, "The number of characters in each row of the printed image")
+	flag.BoolVar(&isWebImg, "web", false, "Whether the image is in the filesystem or fetched from the web")
+	flag.BoolVar(&isPrintSaved, "save", false, "Whether or not the the print will be written to a text file")
+	flag.BoolVar(&isPrintInverted, "invert", false, "Whether or not the the print will be inverted")
+	flag.StringVar(&printMode, "mode", "ascii", "The mode the image will be printed in. (color, ascii, or box)")
+	flag.StringVar(&asciiPattern, "ascii", defaultAsciiPattern, "The pattern of ascii characters from least to greatest visibility. pattern of over 8 characters is not recommended")
 
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, usageString)
@@ -63,7 +63,7 @@ Flags:`
 	case "ascii":
 	case "color":
 	default:
-		fmt.Println("please provide a valid print mode (color, ascii, or box)")
+		fmt.Println("Please provide a valid print mode (color, ascii, or box)")
 		os.Exit(1)
 	}
 
@@ -72,7 +72,7 @@ Flags:`
 	}
 
 	if len(flag.Args()) == 0 {
-		fmt.Println("please provide an image file or address(url) to print")
+		fmt.Println("Please provide an image file or address(url) to print")
 		os.Exit(1)
 	}
 
@@ -80,7 +80,7 @@ Flags:`
 
 	if isPrintSaved {
 		if printMode == "color" {
-			fmt.Println("cannot save print in color mode.")
+			fmt.Println("Cannot save print in color mode.")
 			os.Exit(1)
 		} else {
 			if len(flag.Args()) == 1 {
@@ -92,7 +92,7 @@ Flags:`
 	}
 
 	if len(file) < 3 {
-		fmt.Println("please provide an image file or address(url) to print")
+		fmt.Println("Please provide an image file or address(url) to print")
 		os.Exit(1)
 	}
 
