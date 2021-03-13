@@ -16,6 +16,9 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
@@ -32,16 +35,30 @@ var rootCmd = &cobra.Command{
 	Short: "A rough copy of imgcli written with cobra",
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
 func init() {
+	cobra.OnInitialize(func() {
+		switch outputMode {
+		case "ascii":
+		case "color":
+		case "box":
+		default:
+			fmt.Println("Please provide a valid print mode (color, ascii, or box)")
+			os.Exit(1)
+		}
+
+		if rootCmd.Flag("ascii").Changed {
+			outputMode = "ascii"
+		}
+	})
+
 	rootCmd.PersistentFlags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
 	rootCmd.PersistentFlags().BoolVarP(&isInverted, "invert", "i", false, "Whether the the print will be inverted or not")
 	rootCmd.PersistentFlags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
 	rootCmd.PersistentFlags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
 	rootCmd.PersistentFlags().StringVarP(&asciiPattern, "ascii", "p", " .-+*#%@", "The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended")
+
 }
