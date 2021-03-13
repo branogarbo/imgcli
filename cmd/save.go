@@ -27,10 +27,15 @@ var saveCmd = &cobra.Command{
 	Use:     "save",
 	Short:   "Saves converted image to a text file",
 	Example: "imgcli save -i ./images/pic.jpg",
-	Args:    cobra.ExactArgs(2),
+	Args:    cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]
-		dst = args[1]
+
+		if len(args) == 2 {
+			dst = args[1]
+		} else {
+			dst = "./print.txt"
+		}
 
 		isUseWeb, err = cmd.Flags().GetBool("web")
 		outputWidth, err = cmd.Flags().GetInt("width")
@@ -42,7 +47,8 @@ var saveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		imgData, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
+		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
+		defer img.Close()
 
 		if err != nil {
 			fmt.Println(err)
