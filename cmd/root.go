@@ -18,7 +18,6 @@ package cmd
 import (
 	"fmt"
 	"image"
-	"io"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -36,7 +35,6 @@ var (
 	imgWidth     int
 	imgHeight    int
 	err          error
-	img          io.ReadCloser
 )
 
 var rootCmd = &cobra.Command{

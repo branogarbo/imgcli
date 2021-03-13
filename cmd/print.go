@@ -38,11 +38,11 @@ var printCmd = &cobra.Command{
 		asciiPattern, err = cmd.Flags().GetString("ascii")
 
 		if err != nil {
+			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
-		defer img.Close()
+		imgData, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
 
 		if err != nil {
 			fmt.Println(err)

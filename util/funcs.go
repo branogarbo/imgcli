@@ -14,7 +14,7 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, io.ReadCloser, int, int, error) {
+func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, int, int, error) {
 	var (
 		img       io.ReadCloser
 		imgData   image.Image
@@ -28,6 +28,7 @@ func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, io.Re
 	} else {
 		img = GetImgByFilePath(src)
 	}
+	defer img.Close()
 
 	imgData, _, err = image.Decode(img)
 
@@ -36,7 +37,7 @@ func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, io.Re
 	imgWidth = imgData.Bounds().Max.X
 	imgHeight = imgData.Bounds().Max.Y
 
-	return imgData, img, imgWidth, imgHeight, err
+	return imgData, imgWidth, imgHeight, err
 }
 
 func GetImgByUrl(url string) io.ReadCloser {

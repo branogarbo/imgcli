@@ -42,8 +42,7 @@ var saveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
-		defer img.Close()
+		imgData, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
 
 		if err != nil {
 			fmt.Println(err)
