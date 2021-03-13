@@ -38,8 +38,8 @@ func main() {
 A simple tool written in Go that prints images to the command line and more.
 
 Usage:
-  imgcli [--mode=<mode>] [--width=<number>] [--invert] [--save] [--ascii] <path-to-image>
-  imgcli [--mode=<mode>] [--width=<number>] [--invert] [--save] [--ascii] [--web] "<image-url>"
+  imgcli [--mode=<mode>] [--width=<number>] [--ascii=<pattern>] [--invert] [--save] <path-to-image>
+  imgcli [--mode=<mode>] [--width=<number>] [--ascii=<pattern>] [--invert] [--save] [--web] "<image-url>"
 
 Flags:`
 
