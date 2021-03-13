@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"image"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -28,6 +29,12 @@ var (
 	outputMode   string
 	outputWidth  int
 	asciiPattern string
+	src          string
+	dst          string
+	imgData      image.Image
+	imgWidth     int
+	imgHeight    int
+	err          error
 )
 
 var rootCmd = &cobra.Command{
@@ -60,5 +67,4 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
 	rootCmd.PersistentFlags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
 	rootCmd.PersistentFlags().StringVarP(&asciiPattern, "ascii", "p", " .-+*#%@", "The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended")
-
 }

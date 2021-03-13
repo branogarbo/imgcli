@@ -17,7 +17,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/branogarbo/imgcli-cobra/util"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +29,25 @@ var saveCmd = &cobra.Command{
 	Example: "imgcli save -i ./images/pic.jpg",
 	Args:    cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("save called", args, cmd.Flag("invert").Value)
+		src = args[0]
+		dst = args[1]
+
+		isUseWeb, err = cmd.Flags().GetBool("web")
+		outputWidth, err = cmd.Flags().GetInt("width")
+		isInverted, err = cmd.Flags().GetBool("invert")
+		outputMode, err = cmd.Flags().GetString("mode")
+		asciiPattern, err = cmd.Flags().GetString("ascii")
+		if err != nil {
+			os.Exit(1)
+		}
+
+		imgData, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		util.DrawPixels(imgData, imgWidth, imgHeight, true, dst, isInverted, outputMode, asciiPattern)
 	},
 }
 
