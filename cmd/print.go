@@ -36,11 +36,14 @@ var printCmd = &cobra.Command{
 		isInverted, err = cmd.Flags().GetBool("invert")
 		outputMode, err = cmd.Flags().GetString("mode")
 		asciiPattern, err = cmd.Flags().GetString("ascii")
+
 		if err != nil {
 			os.Exit(1)
 		}
 
-		imgData, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
+		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
+		defer img.Close()
+
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
