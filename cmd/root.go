@@ -16,10 +16,8 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"image"
 	"io"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -49,21 +47,6 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(func() {
-		switch outputMode {
-		case "ascii":
-		case "color":
-		case "box":
-		default:
-			fmt.Println("Please provide a valid print mode (color, ascii, or box)")
-			os.Exit(1)
-		}
-
-		if rootCmd.Flag("ascii").Changed {
-			outputMode = "ascii"
-		}
-	})
-
 	rootCmd.PersistentFlags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
 	rootCmd.PersistentFlags().BoolVarP(&isInverted, "invert", "i", false, "Whether the the print will be inverted or not")
 	rootCmd.PersistentFlags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")

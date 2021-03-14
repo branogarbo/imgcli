@@ -127,6 +127,15 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		pbTemplate      string
 	)
 
+	switch printMode {
+	case "ascii":
+	case "color":
+	case "box":
+	default:
+		fmt.Println("Please provide a valid print mode (color, ascii, or box)")
+		os.Exit(1)
+	}
+
 	if printMode == "color" {
 		if runtime.GOOS == "windows" {
 			colored = true
@@ -207,3 +216,9 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 
 	return nil
 }
+
+// rewrite DrawPixels to
+// 1. have all option logic (ex: cant save in color mode)
+// 2. generate pixelString
+// 3. handle pixelString according to the passed params (ex: fmt.Print for printing, file.WriteString for saving)
+// 4. return pixelString for using DrawPixels outside of imgcli-cobra
