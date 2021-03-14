@@ -27,12 +27,13 @@ Available Commands:
   save        Saves converted image to a text file
 
 Flags:
-  -p, --ascii string   The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended (default " .-+*#%@")
   -h, --help           help for imgcli-cobra
   -i, --invert         Whether the the print will be inverted or not
   -m, --mode string    he mode the image will be printed in (default "ascii")
   -W, --web            Whether the source image is in the filesystem or fetched from the web
   -w, --width int      The number of characters in each row of the output (default 100)
+  -p, --ascii string   The pattern of ascii characters from least to greatest 
+                       visibility. Patterns of over 8 characters are not recommended (default " .-+*#%@")
 
 Use "imgcli-cobra [command] --help" for more information about a command.
 ```
