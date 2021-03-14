@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"net/http"
 	"os"
@@ -14,7 +16,28 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, io.ReadCloser, int, int, error) {
+func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved, isInverted bool, asciiPattern string) error {
+	var (
+		imgData   image.Image
+		imgWidth  int
+		imgHeight int
+		err       error
+	)
+
+	imgData, imgWidth, imgHeight, err = ProcessImage(src, isUseWeb, outputWidth)
+	if err != nil {
+		return err
+	}
+
+	err = DrawPixels(imgData, imgWidth, imgHeight, isSaved, dst, isInverted, outputMode, asciiPattern)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, int, int, error) {
 	var (
 		img       io.ReadCloser
 		imgData   image.Image
@@ -24,39 +47,44 @@ func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, io.Re
 	)
 
 	if isUseWeb {
-		img = GetImgByUrl(src)
+		img, err = GetImgByUrl(src)
 	} else {
-		img = GetImgByFilePath(src)
+		img, err = GetImgByFilePath(src)
 	}
+	if err != nil {
+		return nil, 0, 0, err
+	}
+	defer img.Close()
 
 	imgData, _, err = image.Decode(img)
+	if err != nil {
+		return nil, 0, 0, err
+	}
 
 	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*9/20, transform.Linear)
 
 	imgWidth = imgData.Bounds().Max.X
 	imgHeight = imgData.Bounds().Max.Y
 
-	return imgData, img, imgWidth, imgHeight, err
+	return imgData, imgWidth, imgHeight, nil
 }
 
-func GetImgByUrl(url string) io.ReadCloser {
+func GetImgByUrl(url string) (io.ReadCloser, error) {
 	res, err := http.Get(url)
 	if err != nil || res.StatusCode != 200 {
-		fmt.Println(err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	return res.Body
+	return res.Body, nil
 }
 
-func GetImgByFilePath(file string) io.ReadCloser {
+func GetImgByFilePath(file string) (io.ReadCloser, error) {
 	img, err := os.Open(file)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	return img
+	return img, nil
 }
 
 func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
@@ -88,7 +116,7 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	return int(scaledValue)
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string) {
+func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string) error {
 	var (
 		pixelLevels     string
 		pixelLevel      int
@@ -164,18 +192,18 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	if isPrintSaved {
 		file, err := os.Create(printSaveTo)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return err
 		}
 		defer file.Close()
 
 		_, err = file.WriteString(pixelSaveString)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			return err
 		}
 
 		progressBar.Finish()
 		fmt.Println("Done. Saved to", printSaveTo)
 	}
+
+	return nil
 }

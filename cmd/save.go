@@ -26,7 +26,7 @@ import (
 var saveCmd = &cobra.Command{
 	Use:     "save",
 	Short:   "Saves converted image to a text file",
-	Example: "imgcli save -i ./images/pic.jpg",
+	Example: "imgcli-cobra save -i ./images/pic.jpg",
 	Args:    cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]
@@ -37,25 +37,22 @@ var saveCmd = &cobra.Command{
 			dst = "./print.txt"
 		}
 
-		isUseWeb, err = cmd.Flags().GetBool("web")
-		outputWidth, err = cmd.Flags().GetInt("width")
-		isInverted, err = cmd.Flags().GetBool("invert")
 		outputMode, err = cmd.Flags().GetString("mode")
+		outputWidth, err = cmd.Flags().GetInt("width")
+		isUseWeb, err = cmd.Flags().GetBool("web")
+		isInverted, err = cmd.Flags().GetBool("invert")
 		asciiPattern, err = cmd.Flags().GetString("ascii")
-
-		if err != nil {
-			os.Exit(1)
-		}
-
-		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
-		defer img.Close()
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		util.DrawPixels(imgData, imgWidth, imgHeight, true, dst, isInverted, outputMode, asciiPattern)
+		err = util.OutputImage(src, dst, outputMode, outputWidth, isUseWeb, true, isInverted, asciiPattern)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	},
 }
 

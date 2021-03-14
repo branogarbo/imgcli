@@ -26,15 +26,15 @@ import (
 var printCmd = &cobra.Command{
 	Use:     "print",
 	Short:   "Prints images to the command line",
-	Example: "imgcli print -w 200 ./images/pic.jpg",
+	Example: "imgcli-cobra print -w 200 ./images/pic.jpg",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]
 
-		isUseWeb, err = cmd.Flags().GetBool("web")
-		outputWidth, err = cmd.Flags().GetInt("width")
-		isInverted, err = cmd.Flags().GetBool("invert")
 		outputMode, err = cmd.Flags().GetString("mode")
+		outputWidth, err = cmd.Flags().GetInt("width")
+		isUseWeb, err = cmd.Flags().GetBool("web")
+		isInverted, err = cmd.Flags().GetBool("invert")
 		asciiPattern, err = cmd.Flags().GetString("ascii")
 
 		if err != nil {
@@ -42,15 +42,11 @@ var printCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		imgData, img, imgWidth, imgHeight, err = util.ProcessImage(src, isUseWeb, outputWidth)
-		defer img.Close()
-
+		err = util.OutputImage(src, dst, outputMode, outputWidth, isUseWeb, false, isInverted, asciiPattern)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-
-		util.DrawPixels(imgData, imgWidth, imgHeight, false, "", isInverted, outputMode, asciiPattern)
 	},
 }
 
