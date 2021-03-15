@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/branogarbo/imgcli-cobra/cmd"
+import "github.com/branogarbo/imgcli/cmd"
 
 func main() {
 	cmd.Execute()

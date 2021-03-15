@@ -232,7 +232,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		fmt.Println("Done. Saved to", printSaveTo)
 	}
 
-	// 4. return pixelString for using DrawPixels outside of imgcli-cobra
+	// 4. return pixelString for using DrawPixels outside of imgcli
 
 	return pixelString, nil
 }

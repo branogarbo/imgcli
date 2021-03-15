@@ -1,4 +1,4 @@
-# 📷 **imgcli-cobra**
+# 📷 **imgcli**
 **A simple tool written in Go that prints images to the command line and more.**
 
 ---
@@ -6,24 +6,24 @@
 ## 🔧 **Setup**
 Download and compile from sources:
 ```
-go get github.com/branogarbo/imgcli-cobra
+go get github.com/branogarbo/imgcli
 ```
 Install just the binary with Go:
 ```
-go install github.com/branogarbo/imgcli-cobra@latest
+go install github.com/branogarbo/imgcli@latest
 ```
 
-Or get the pre-compiled binaries for your platform on the [releases page](https://github.com/branogarbo/imgcli-cobra/releases)
+Or get the pre-compiled binaries for your platform on the [releases page](https://github.com/branogarbo/imgcli/releases)
 
 
 ## 💻 **CLI usage**
 ```
-imgcli-cobra
+imgcli
 
-A rough copy of imgcli written with cobra
+A simple tool written in Go that prints images to the command line and more.
 
 Usage:
-  imgcli-cobra [command]
+  imgcli [command]
 
 Available Commands:
   help        Help about any command
@@ -31,19 +31,19 @@ Available Commands:
   save        Saves converted image to a text file
 
 Flags:
-  -h, --help   help for imgcli-cobra
+  -h, --help   help for imgcli
 
-Use "imgcli-cobra [command] --help" for more information about a command.
+Use "imgcli [command] --help" for more information about a command.
 ```
 
 Command Usage:
 ```
 Usage:
-  imgcli-cobra [command] [flags]
+  imgcli [command] [flags]
 
 Examples:
-imgcli-cobra print --invert ./images/pic.jpg
-imgcli-cobra save -w 200 -W "https://url-to-some/image.jpg"
+imgcli print --invert ./images/pic.jpg
+imgcli save -w 200 -W "https://url-to-some/image.jpg"
 
 Flags:
   -h, --help           help for save
@@ -54,5 +54,5 @@ Flags:
   -p, --ascii string   The pattern of ascii characters from least to greatest 
                        visibility. Patterns of over 8 characters are not recommended (default " .-+*#%@")
 
-Use "imgcli-cobra [command] --help" for more information about a command.
+Use "imgcli [command] --help" for more information about a command.
 ```

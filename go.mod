@@ -1,4 +1,4 @@
-module github.com/branogarbo/imgcli-cobra
+module github.com/branogarbo/imgcli
 
 go 1.16
 

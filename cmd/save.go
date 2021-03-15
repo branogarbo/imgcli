@@ -19,14 +19,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/branogarbo/imgcli-cobra/util"
+	"github.com/branogarbo/imgcli/util"
 	"github.com/spf13/cobra"
 )
 
 var saveCmd = &cobra.Command{
 	Use:     "save",
 	Short:   "Saves output image to a text file.",
-	Example: `imgcli-cobra save -w 200 -W "https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg"`,
+	Example: `imgcli save -w 200 -W "https://url-to-some/image.jpg"`,
 	Args:    cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]
