@@ -8,6 +8,10 @@ Download and compile from sources:
 ```
 go get github.com/branogarbo/imgcli-cobra
 ```
+Install just the binary with Go:
+```
+go install github.com/branogarbo/imgcli-cobra@latest
+```
 
 Or get the pre-compiled binaries for your platform on the [releases page](https://github.com/branogarbo/imgcli-cobra/releases)
 
