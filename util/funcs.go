@@ -16,7 +16,34 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved, isInverted bool, asciiPattern string, isPrinted bool) (string, error) {
+type OutputConfig struct {
+	ImgData      image.Image
+	Src          string
+	Dst          string
+	OutputMode   string
+	AsciiPattern string
+	ImgWidth     int
+	ImgHeight    int
+	OutputWidth  int
+	IsUseWeb     bool
+	IsPrinted    bool
+	IsSaved      bool
+	IsInverted   bool
+}
+
+func OutputImage(c OutputConfig) (string, error) {
+	var (
+		src          string = c.Src
+		dst          string = c.Dst
+		outputMode   string = c.OutputMode
+		asciiPattern string = c.AsciiPattern
+		outputWidth  int    = c.OutputWidth
+		isUseWeb     bool   = c.IsUseWeb
+		isPrinted    bool   = c.IsPrinted
+		isSaved      bool   = c.IsSaved
+		isInverted   bool   = c.IsInverted
+	)
+
 	var (
 		imgData     image.Image
 		imgWidth    int
@@ -25,12 +52,28 @@ func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved
 		err         error
 	)
 
-	imgData, imgWidth, imgHeight, err = ProcessImage(src, isUseWeb, outputWidth)
+	imgData, imgWidth, imgHeight, err = ProcessImage(OutputConfig{
+		Src:         src,
+		IsUseWeb:    isUseWeb,
+		OutputWidth: outputWidth,
+	})
 	if err != nil {
 		return "", err
 	}
 
-	pixelString, err = DrawPixels(imgData, imgWidth, imgHeight, isSaved, dst, isInverted, outputMode, asciiPattern, isPrinted)
+	options := OutputConfig{
+		ImgData:      imgData,
+		ImgWidth:     imgWidth,
+		ImgHeight:    imgHeight,
+		IsSaved:      isSaved,
+		Dst:          dst,
+		IsInverted:   isInverted,
+		OutputMode:   outputMode,
+		AsciiPattern: asciiPattern,
+		IsPrinted:    isPrinted,
+	}
+
+	pixelString, err = DrawPixels(options)
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +81,13 @@ func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved
 	return pixelString, nil
 }
 
-func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, int, int, error) {
+func ProcessImage(c OutputConfig) (image.Image, int, int, error) {
+	var (
+		src         string = c.Src
+		isUseWeb    bool   = c.IsUseWeb
+		outputWidth int    = c.OutputWidth
+	)
+
 	var (
 		img       io.ReadCloser
 		imgData   image.Image
@@ -62,7 +111,7 @@ func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, int, 
 		return nil, 0, 0, err
 	}
 
-	imgData = transform.Resize(imgData, printWidth, printWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*9/20, transform.Linear)
+	imgData = transform.Resize(imgData, outputWidth, outputWidth*imgData.Bounds().Max.Y/imgData.Bounds().Max.X*9/20, transform.Linear)
 
 	imgWidth = imgData.Bounds().Max.X
 	imgHeight = imgData.Bounds().Max.Y
@@ -117,7 +166,19 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	return int(scaledValue)
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string, isPrinted bool) (string, error) {
+func DrawPixels(c OutputConfig) (string, error) {
+	var (
+		imgData      image.Image = c.ImgData
+		imgWidth     int         = c.ImgWidth
+		imgHeight    int         = c.ImgHeight
+		isSaved      bool        = c.IsSaved
+		dst          string      = c.Dst
+		isInverted   bool        = c.IsInverted
+		outputMode   string      = c.OutputMode
+		asciiPattern string      = c.AsciiPattern
+		isPrinted    bool        = c.IsPrinted
+	)
+
 	var (
 		pixelLevels string
 		pixelLevel  int
@@ -129,7 +190,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	)
 
 	// 1. have all option logic (ex: cant save in color mode)
-	switch printMode {
+	switch outputMode {
 	case "ascii":
 	case "color":
 	case "box":
@@ -138,7 +199,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 		os.Exit(1)
 	}
 
-	if printMode == "color" {
+	if outputMode == "color" {
 		if runtime.GOOS == "windows" {
 			colored = true
 		} else {
@@ -146,14 +207,14 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			os.Exit(1)
 		}
 	}
-	if printMode == "box" {
+	if outputMode == "box" {
 		pixelLevels = " ░▒▓█"
 	}
-	if printMode == "ascii" {
+	if outputMode == "ascii" {
 		pixelLevels = asciiPattern //  .:-=+*#%@
 	}
 
-	if isPrintSaved {
+	if isSaved {
 		if colored {
 			fmt.Println("Cannot save output in color mode.")
 			os.Exit(1)
@@ -173,7 +234,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			l := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
 			r, g, b, _ := imgData.At(x, y).RGBA()
 
-			if isPrintInverted {
+			if isInverted {
 				if colored {
 					r = 255 - r
 					g = 255 - g
@@ -195,7 +256,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 
 			pixelString += pixelChar
 
-			if isPrintSaved && !isPrinted {
+			if isSaved && !isPrinted {
 				progressBar.Increment()
 			}
 			if isPrinted {
@@ -218,8 +279,8 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 
 	// 3. handle pixelString according to the passed params (printing to console happens in pixel generation bc it looks cool)
 
-	if isPrintSaved {
-		file, err := os.Create(printSaveTo)
+	if isSaved {
+		file, err := os.Create(dst)
 		if err != nil {
 			return "", err
 		}
@@ -232,7 +293,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 
 		if !isPrinted {
 			progressBar.Finish()
-			fmt.Println("Done. Saved to", printSaveTo)
+			fmt.Println("Done. Saved to", dst)
 		}
 	}
 

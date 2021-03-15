@@ -48,7 +48,19 @@ var saveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		_, err = util.OutputImage(src, dst, outputMode, outputWidth, isUseWeb, true, isInverted, asciiPattern, false)
+		options := util.OutputConfig{
+			Src:          src,
+			Dst:          dst,
+			OutputMode:   outputMode,
+			OutputWidth:  outputWidth,
+			IsUseWeb:     isUseWeb,
+			IsSaved:      true,
+			IsInverted:   isInverted,
+			AsciiPattern: asciiPattern,
+			IsPrinted:    false,
+		}
+
+		_, err = util.OutputImage(options)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
