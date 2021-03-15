@@ -51,6 +51,7 @@ Flags:
   -m, --mode string    he mode the image will be printed in (default "ascii")
   -W, --web            Whether the source image is in the filesystem or fetched from the web
   -w, --width int      The number of characters in each row of the output (default 100)
+  -q, --quiet          Whether the save output is quiet or not (for save command only, doesnt matter on print command)
   -p, --ascii string   The pattern of ascii characters from least to greatest 
                        visibility. Patterns of over 8 characters are not recommended (default " .-+*#%@")
 

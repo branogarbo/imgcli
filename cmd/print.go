@@ -52,6 +52,7 @@ var printCmd = &cobra.Command{
 			IsInverted:   isInverted,
 			AsciiPattern: asciiPattern,
 			IsPrinted:    true,
+			IsQuiet:      false, // doesnt matter for printing
 		}
 
 		_, err = util.OutputImage(options)

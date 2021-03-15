@@ -35,6 +35,7 @@ var (
 	imgHeight    int
 	err          error
 	img          io.ReadCloser
+	isQuiet      bool
 )
 
 var rootCmd = &cobra.Command{
@@ -49,6 +50,8 @@ func Execute() {
 func init() {
 	AddOutputFlags(printCmd)
 	AddOutputFlags(saveCmd)
+
+	saveCmd.Flags().BoolVarP(&isQuiet, "quiet", "q", false, "Whether the save output is quiet or not")
 }
 
 func AddOutputFlags(cmd *cobra.Command) {

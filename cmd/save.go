@@ -42,6 +42,7 @@ var saveCmd = &cobra.Command{
 		isUseWeb, err = cmd.Flags().GetBool("web")
 		isInverted, err = cmd.Flags().GetBool("invert")
 		asciiPattern, err = cmd.Flags().GetString("ascii")
+		isQuiet, err = cmd.Flags().GetBool("quiet")
 
 		if err != nil {
 			fmt.Println(err)
@@ -58,6 +59,7 @@ var saveCmd = &cobra.Command{
 			IsInverted:   isInverted,
 			AsciiPattern: asciiPattern,
 			IsPrinted:    false,
+			IsQuiet:      isQuiet,
 		}
 
 		_, err = util.OutputImage(options)

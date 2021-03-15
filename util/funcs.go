@@ -28,6 +28,7 @@ type OutputConfig struct {
 	IsUseWeb     bool
 	IsPrinted    bool
 	IsSaved      bool
+	IsQuiet      bool
 	IsInverted   bool
 }
 
@@ -42,6 +43,7 @@ func OutputImage(c OutputConfig) (string, error) {
 		isPrinted    bool   = c.IsPrinted
 		isSaved      bool   = c.IsSaved
 		isInverted   bool   = c.IsInverted
+		isQuiet      bool   = c.IsQuiet
 	)
 
 	var (
@@ -71,6 +73,7 @@ func OutputImage(c OutputConfig) (string, error) {
 		OutputMode:   outputMode,
 		AsciiPattern: asciiPattern,
 		IsPrinted:    isPrinted,
+		IsQuiet:      isQuiet,
 	}
 
 	pixelString, err = DrawPixels(options)
@@ -177,6 +180,7 @@ func DrawPixels(c OutputConfig) (string, error) {
 		outputMode   string      = c.OutputMode
 		asciiPattern string      = c.AsciiPattern
 		isPrinted    bool        = c.IsPrinted
+		isQuiet      bool        = c.IsQuiet
 	)
 
 	var (
@@ -221,8 +225,10 @@ func DrawPixels(c OutputConfig) (string, error) {
 		}
 
 		if !isPrinted {
-			pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
-			progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
+			if !isQuiet {
+				pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
+				progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
+			}
 		}
 	}
 
@@ -256,7 +262,7 @@ func DrawPixels(c OutputConfig) (string, error) {
 
 			pixelString += pixelChar
 
-			if isSaved && !isPrinted {
+			if isSaved && !isPrinted && !isQuiet {
 				progressBar.Increment()
 			}
 			if isPrinted {
@@ -291,7 +297,7 @@ func DrawPixels(c OutputConfig) (string, error) {
 			return "", err
 		}
 
-		if !isPrinted {
+		if !isPrinted && !isQuiet {
 			progressBar.Finish()
 			fmt.Println("Done. Saved to", dst)
 		}
