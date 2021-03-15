@@ -16,25 +16,26 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved, isInverted bool, asciiPattern string) error {
+func OutputImage(src, dst, outputMode string, outputWidth int, isUseWeb, isSaved, isInverted bool, asciiPattern string, isPrinted bool) (string, error) {
 	var (
-		imgData   image.Image
-		imgWidth  int
-		imgHeight int
-		err       error
+		imgData     image.Image
+		imgWidth    int
+		imgHeight   int
+		pixelString string
+		err         error
 	)
 
 	imgData, imgWidth, imgHeight, err = ProcessImage(src, isUseWeb, outputWidth)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	err = DrawPixels(imgData, imgWidth, imgHeight, isSaved, dst, isInverted, outputMode, asciiPattern)
+	pixelString, err = DrawPixels(imgData, imgWidth, imgHeight, isSaved, dst, isInverted, outputMode, asciiPattern, isPrinted)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return pixelString, nil
 }
 
 func ProcessImage(src string, isUseWeb bool, printWidth int) (image.Image, int, int, error) {
@@ -116,23 +117,24 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	return int(scaledValue)
 }
 
-func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string) error {
+func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool, printSaveTo string, isPrintInverted bool, printMode, asciiPattern string, isPrinted bool) (string, error) {
 	var (
-		pixelLevels     string
-		pixelLevel      int
-		pixelChar       string
-		pixelSaveString string
-		colored         bool
-		progressBar     *pb.ProgressBar
-		pbTemplate      string
+		pixelLevels string
+		pixelLevel  int
+		pixelChar   string
+		pixelString string
+		colored     bool
+		progressBar *pb.ProgressBar
+		pbTemplate  string
 	)
 
+	// 1. have all option logic (ex: cant save in color mode)
 	switch printMode {
 	case "ascii":
 	case "color":
 	case "box":
 	default:
-		fmt.Println("Please provide a valid print mode (color, ascii, or box)")
+		fmt.Println("Please provide a valid print mode. (color, ascii, or box)")
 		os.Exit(1)
 	}
 
@@ -152,12 +154,20 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 	}
 
 	if isPrintSaved {
+		if colored {
+			fmt.Println("Cannot save output in color mode.")
+			os.Exit(1)
+		}
+
 		pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
 		progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
 	}
 
+	// 2. generate pixelString
 	for y := 0; y < imgHeight; y++ {
 		for x := 0; x < imgWidth; x++ {
+			// applying changes to pixel according to passed params
+
 			l := color.GrayModel.Convert(imgData.At(x, y)).(color.Gray)
 			r, g, b, _ := imgData.At(x, y).RGBA()
 
@@ -179,10 +189,14 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 				pixelChar = string([]rune(pixelLevels)[pixelLevel])
 			}
 
+			// appending pixel to pixelString or printing pixel
+
+			pixelString += pixelChar
+
 			if isPrintSaved {
 				progressBar.Increment()
-				pixelSaveString += pixelChar
-			} else {
+			}
+			if isPrinted {
 				if colored {
 					printColor.RGB(uint8(r), uint8(g), uint8(b), true).Print(pixelChar)
 				} else {
@@ -191,34 +205,34 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			}
 		}
 
-		if isPrintSaved {
-			pixelSaveString += "\n"
-		} else {
+		// newline behavior
+
+		pixelString += "\n"
+
+		if isPrinted {
 			fmt.Println()
 		}
 	}
 
+	// 3. handle pixelString according to the passed params (printing to console happens in pixel generation bc it looks cool)
+
 	if isPrintSaved {
 		file, err := os.Create(printSaveTo)
 		if err != nil {
-			return err
+			return "", err
 		}
 		defer file.Close()
 
-		_, err = file.WriteString(pixelSaveString)
+		_, err = file.WriteString(pixelString)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		progressBar.Finish()
 		fmt.Println("Done. Saved to", printSaveTo)
 	}
 
-	return nil
-}
+	// 4. return pixelString for using DrawPixels outside of imgcli-cobra
 
-// rewrite DrawPixels to
-// 1. have all option logic (ex: cant save in color mode)
-// 2. generate pixelString
-// 3. handle pixelString according to the passed params (ex: fmt.Print for printing, file.WriteString for saving)
-// 4. return pixelString for using DrawPixels outside of imgcli-cobra
+	return pixelString, nil
+}

@@ -42,7 +42,7 @@ var printCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = util.OutputImage(src, dst, outputMode, outputWidth, isUseWeb, false, isInverted, asciiPattern)
+		_, err = util.OutputImage(src, dst, outputMode, outputWidth, isUseWeb, false, isInverted, asciiPattern, true)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
