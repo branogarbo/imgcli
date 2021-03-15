@@ -47,9 +47,14 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
-	rootCmd.PersistentFlags().BoolVarP(&isInverted, "invert", "i", false, "Whether the the print will be inverted or not")
-	rootCmd.PersistentFlags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
-	rootCmd.PersistentFlags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
-	rootCmd.PersistentFlags().StringVarP(&asciiPattern, "ascii", "p", " .-+*#%@", "The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended")
+	AddOutputFlags(printCmd)
+	AddOutputFlags(saveCmd)
+}
+
+func AddOutputFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
+	cmd.Flags().BoolVarP(&isInverted, "invert", "i", false, "Whether the the print will be inverted or not")
+	cmd.Flags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
+	cmd.Flags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
+	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", " .-+*#%@", "The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended")
 }
