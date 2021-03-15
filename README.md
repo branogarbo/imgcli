@@ -46,7 +46,7 @@ imgcli print --invert ./images/pic.jpg
 imgcli save -w 200 -W "https://url-to-some/image.jpg"
 
 Flags:
-  -h, --help           help for save
+  -h, --help           help for command
   -i, --invert         Whether the the print will be inverted or not
   -m, --mode string    he mode the image will be printed in (default "ascii")
   -W, --web            Whether the source image is in the filesystem or fetched from the web
