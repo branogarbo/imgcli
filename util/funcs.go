@@ -297,6 +297,10 @@ func DrawPixels(c OutputConfig) (string, error) {
 		}
 	}
 
+	if colored {
+		pixelString = ""
+	}
+
 	// 4. return pixelString for using DrawPixels outside of imgcli
 
 	return pixelString, nil
