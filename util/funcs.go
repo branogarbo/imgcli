@@ -17,13 +17,32 @@ import (
 )
 
 type OutputConfig struct {
-	ImgData      image.Image
 	Src          string
 	Dst          string
 	OutputMode   string
 	AsciiPattern string
+	OutputWidth  int
+	IsUseWeb     bool
+	IsPrinted    bool
+	IsSaved      bool
+	IsQuiet      bool
+	IsInverted   bool
+}
+
+type ProcessConfig struct {
+	Src         string
+	IsUseWeb    bool
+	OutputWidth int
+}
+
+type DrawConfig struct {
+	ImgData      image.Image
 	ImgWidth     int
 	ImgHeight    int
+	Src          string
+	Dst          string
+	OutputMode   string
+	AsciiPattern string
 	OutputWidth  int
 	IsUseWeb     bool
 	IsPrinted    bool
@@ -54,16 +73,18 @@ func OutputImage(c OutputConfig) (string, error) {
 		err         error
 	)
 
-	imgData, imgWidth, imgHeight, err = ProcessImage(OutputConfig{
+	processOptions := ProcessConfig{
 		Src:         src,
 		IsUseWeb:    isUseWeb,
 		OutputWidth: outputWidth,
-	})
+	}
+
+	imgData, imgWidth, imgHeight, err = ProcessImage(processOptions)
 	if err != nil {
 		return "", err
 	}
 
-	options := OutputConfig{
+	options := DrawConfig{
 		ImgData:      imgData,
 		ImgWidth:     imgWidth,
 		ImgHeight:    imgHeight,
@@ -84,7 +105,7 @@ func OutputImage(c OutputConfig) (string, error) {
 	return pixelString, nil
 }
 
-func ProcessImage(c OutputConfig) (image.Image, int, int, error) {
+func ProcessImage(c ProcessConfig) (image.Image, int, int, error) {
 	var (
 		src         string = c.Src
 		isUseWeb    bool   = c.IsUseWeb
@@ -169,7 +190,7 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	return int(scaledValue)
 }
 
-func DrawPixels(c OutputConfig) (string, error) {
+func DrawPixels(c DrawConfig) (string, error) {
 	var (
 		imgData      image.Image = c.ImgData
 		imgWidth     int         = c.ImgWidth
