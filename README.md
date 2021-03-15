@@ -27,11 +27,26 @@ Usage:
 
 Available Commands:
   help        Help about any command
-  print       Prints images to the command line
+  print       Prints images to the command line   
   save        Saves converted image to a text file
 
 Flags:
-  -h, --help           help for imgcli-cobra
+  -h, --help   help for imgcli-cobra
+
+Use "imgcli-cobra [command] --help" for more information about a command.
+```
+
+Command Usage:
+```
+Usage:
+  imgcli-cobra [command] [flags]
+
+Examples:
+imgcli-cobra print --invert ./images/pic.jpg
+imgcli-cobra save -w 200 -W "https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg"
+
+Flags:
+  -h, --help           help for save
   -i, --invert         Whether the the print will be inverted or not
   -m, --mode string    he mode the image will be printed in (default "ascii")
   -W, --web            Whether the source image is in the filesystem or fetched from the web

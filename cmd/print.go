@@ -25,8 +25,8 @@ import (
 
 var printCmd = &cobra.Command{
 	Use:     "print",
-	Short:   "Prints images to the command line",
-	Example: "imgcli-cobra print -w 200 ./images/pic.jpg",
+	Short:   "Prints output to the command line.",
+	Example: "imgcli-cobra print --invert ./images/pic.jpg",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]

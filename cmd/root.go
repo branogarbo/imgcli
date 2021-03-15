@@ -39,7 +39,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "imgcli-cobra",
-	Short: "A rough copy of imgcli written with cobra",
+	Short: "A simple tool written in Go that prints images to the command line and more. (Rough copy of imgcli written with cobra)",
 }
 
 func Execute() {

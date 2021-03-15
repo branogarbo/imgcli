@@ -25,8 +25,8 @@ import (
 
 var saveCmd = &cobra.Command{
 	Use:     "save",
-	Short:   "Saves converted image to a text file",
-	Example: "imgcli-cobra save -i ./images/pic.jpg",
+	Short:   "Saves output image to a text file.",
+	Example: `imgcli-cobra save -w 200 -W "https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg"`,
 	Args:    cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		src = args[0]
