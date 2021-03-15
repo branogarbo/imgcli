@@ -43,7 +43,7 @@ Usage:
 
 Examples:
 imgcli-cobra print --invert ./images/pic.jpg
-imgcli-cobra save -w 200 -W "https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg"
+imgcli-cobra save -w 200 -W "https://url-to-some/image.jpg"
 
 Flags:
   -h, --help           help for save
