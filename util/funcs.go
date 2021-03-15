@@ -159,8 +159,10 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			os.Exit(1)
 		}
 
-		pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
-		progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
+		if !isPrinted {
+			pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
+			progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
+		}
 	}
 
 	// 2. generate pixelString
@@ -193,7 +195,7 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 
 			pixelString += pixelChar
 
-			if isPrintSaved {
+			if isPrintSaved && !isPrinted {
 				progressBar.Increment()
 			}
 			if isPrinted {
@@ -228,8 +230,10 @@ func DrawPixels(imgData image.Image, imgWidth, imgHeight int, isPrintSaved bool,
 			return "", err
 		}
 
-		progressBar.Finish()
-		fmt.Println("Done. Saved to", printSaveTo)
+		if !isPrinted {
+			progressBar.Finish()
+			fmt.Println("Done. Saved to", printSaveTo)
+		}
 	}
 
 	// 4. return pixelString for using DrawPixels outside of imgcli
