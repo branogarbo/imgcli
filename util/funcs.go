@@ -84,7 +84,7 @@ func OutputImage(c OutputConfig) (string, error) {
 		return "", err
 	}
 
-	options := DrawConfig{
+	drawOptions := DrawConfig{
 		ImgData:      imgData,
 		ImgWidth:     imgWidth,
 		ImgHeight:    imgHeight,
@@ -97,7 +97,7 @@ func OutputImage(c OutputConfig) (string, error) {
 		IsQuiet:      isQuiet,
 	}
 
-	pixelString, err = DrawPixels(options)
+	pixelString, err = DrawPixels(drawOptions)
 	if err != nil {
 		return "", err
 	}
