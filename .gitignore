@@ -1,2 +1,3 @@
-*.exe
-*.local.*
+# ignore local examples
+
+/examples/*/*.local.*
