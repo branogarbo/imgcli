@@ -51,10 +51,9 @@ Flags:
   -m, --mode string    The mode the image will be printed in (default "ascii")
   -W, --web            Whether the source image is in the filesystem or fetched from the web
   -w, --width int      The number of characters in each row of the output (default 100)
-  -q, --quiet          Whether the save output is quiet or not (Does not matter for print command)
+  -q, --quiet          Whether the save output is quiet or not. (Does not matter for print command)
   -p, --ascii string   The pattern of ascii characters from least to greatest 
-                       visibility. Patterns of over 8 characters are not recommended. 
-                       (Does not matter for non-ascii modes) (default " .-+*#%@")
+                       visibility. (Does not matter for non-ascii modes) (default " .:-=+*#%@")
 
 Use "imgcli [command] --help" for more information about a command.
 ```
