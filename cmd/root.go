@@ -59,5 +59,5 @@ func AddOutputFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&isInverted, "invert", "i", false, "Whether the the print will be inverted or not")
 	cmd.Flags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
 	cmd.Flags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
-	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", " .:-=+*#%@", "The pattern of ascii characters from least to greatest visibility. Patterns of over 8 characters are not recommended")
+	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", " .:-=+*#%@", "The pattern of ascii characters from least to greatest visibility")
 }
