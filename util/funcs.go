@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -145,8 +146,10 @@ func ProcessImage(c ProcessConfig) (image.Image, int, int, error) {
 
 func GetImgByUrl(url string) (io.ReadCloser, error) {
 	res, err := http.Get(url)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil {
 		return nil, err
+	} else if res.StatusCode != 200 || res.Header.Get("Content-Type")[:6] != "image/" {
+		return nil, errors.New("bad Src provided")
 	}
 
 	return res.Body, nil
