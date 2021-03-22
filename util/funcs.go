@@ -148,7 +148,7 @@ func GetImgByUrl(url string) (io.ReadCloser, error) {
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
-	} else if res.StatusCode != 200 || res.Header.Get("Content-Type")[:6] != "image/" {
+	} else if res.StatusCode != 200 {
 		return nil, errors.New("bad Src provided")
 	}
 
