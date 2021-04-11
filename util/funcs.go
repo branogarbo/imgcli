@@ -17,41 +17,6 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-type OutputConfig struct {
-	Src          string
-	Dst          string
-	OutputMode   string
-	AsciiPattern string
-	OutputWidth  int
-	IsUseWeb     bool
-	IsPrinted    bool
-	IsSaved      bool
-	IsQuiet      bool
-	IsInverted   bool
-}
-
-type ProcessConfig struct {
-	Src         string
-	IsUseWeb    bool
-	OutputWidth int
-}
-
-type DrawConfig struct {
-	ImgData      image.Image
-	ImgWidth     int
-	ImgHeight    int
-	Src          string
-	Dst          string
-	OutputMode   string
-	AsciiPattern string
-	OutputWidth  int
-	IsUseWeb     bool
-	IsPrinted    bool
-	IsSaved      bool
-	IsQuiet      bool
-	IsInverted   bool
-}
-
 func OutputImage(c OutputConfig) (string, error) {
 	var (
 		src          string = c.Src
@@ -310,6 +275,8 @@ func DrawPixels(c DrawConfig) (string, error) {
 	// 3. handle pixelString according to the passed params (printing to console happens in pixel generation bc it looks cool)
 
 	if isSaved {
+		dst = ProcessFileName(dst)
+
 		file, err := os.Create(dst)
 		if err != nil {
 			return "", err
@@ -334,4 +301,22 @@ func DrawPixels(c DrawConfig) (string, error) {
 	// 4. return pixelString for using DrawPixels outside of imgcli
 
 	return pixelString, nil
+}
+
+func ProcessFileName(fileName string) string {
+	var newFileName string = fileName
+
+	for rc := 1; isFileExists(newFileName); rc++ {
+		newFileName = fmt.Sprintf("%v_%v", rc, fileName)
+	}
+
+	return newFileName
+}
+
+func isFileExists(fileName string) bool {
+	if _, err := os.Stat(fileName); err != nil {
+		return false
+	}
+
+	return true
 }
