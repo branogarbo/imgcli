@@ -84,7 +84,7 @@ func ProcessFilePath(filePath string) string {
 	return newFilePath
 }
 
-// isFileExists returns whether filePath already exists.
+// isFileExists returns whether or not filePath already exists.
 func isFileExists(filePath string) bool {
 	if _, err := os.Stat(filePath); err != nil {
 		return false

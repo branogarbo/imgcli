@@ -170,7 +170,7 @@ func DrawPixels(c DrawConfig) (string, error) {
 		if !isPrinted {
 			if !isQuiet {
 				pbTemplate = `{{ etime . }} {{ bar . "[" "=" ">" " " "]" }} {{speed . }} {{percent . }}`
-				progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight)
+				progressBar = pb.ProgressBarTemplate(pbTemplate).Start(imgWidth * imgHeight).SetMaxWidth(100)
 			}
 		}
 	}
