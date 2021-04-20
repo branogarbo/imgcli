@@ -36,7 +36,7 @@ Flags:
 Use "imgcli [command] --help" for more information about a command.
 ```
 
-Command Usage:
+### **Command Usage:**
 ```
 Usage:
   imgcli [command] [flags]
@@ -56,4 +56,41 @@ Flags:
                        visibility (Does not matter for non-ascii modes) (default " .:-=+*#%@")
 
 Use "imgcli [command] --help" for more information about a command.
+```
+
+---
+
+## 📁 **Package Usage**
+Install the package:
+```
+go get github.com/branogarbo/imgcli/util
+```
+
+### **Example:**
+``` go
+package main
+
+import (
+	"fmt"
+	"log"
+
+	ic "github.com/branogarbo/imgcli/util"
+)
+
+func main() {
+	printConfig := ic.OutputConfig{
+		Src:          "https://github.com/branogarbo/imgcli/blob/master/examples/images/portrait.jpg?raw=true",
+		OutputMode:   "ascii",
+		AsciiPattern: " .:-=+*#%@",
+		OutputWidth:  100,
+		IsUseWeb:     true,
+	}
+
+	printString, err := ic.OutputImage(printConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(printString)
+}
 ```
