@@ -3,7 +3,7 @@
 
 ---
 
-🚨 **Warning: imgcli may be replaced by [imgcli-cobra](https://github.com/branogarbo/imgcli-cobra) in the near future under the imgcli name** 🚨
+🚨 **Warning: this version of imgcli is deprecated.** 🚨
 
 ## 🔧 **Setup**
 Install the binary with go:
