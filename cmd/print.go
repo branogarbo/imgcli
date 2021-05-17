@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/branogarbo/imgcli/util"
 	"github.com/spf13/cobra"
@@ -24,7 +23,7 @@ var printCmd = &cobra.Command{
 
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
+			return
 		}
 
 		options := util.OutputConfig{
@@ -41,7 +40,7 @@ var printCmd = &cobra.Command{
 		_, err = util.OutputImage(options)
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(1)
+			return
 		}
 	},
 }

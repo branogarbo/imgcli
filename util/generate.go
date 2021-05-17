@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -134,6 +135,7 @@ func DrawPixels(c DrawConfig) (string, error) {
 		colored     bool
 		progressBar *pb.ProgressBar
 		pbTemplate  string
+		err         error
 	)
 
 	// 1. have all option logic (ex: cant save in color mode)
@@ -142,16 +144,14 @@ func DrawPixels(c DrawConfig) (string, error) {
 	case "color":
 	case "box":
 	default:
-		fmt.Println("Please provide a valid print mode. (color, ascii, or box)")
-		os.Exit(1)
+		return "", errors.New("please provide a valid print mode. (color, ascii, or box)")
 	}
 
 	if outputMode == "color" {
 		if runtime.GOOS == "windows" {
 			colored = true
 		} else {
-			fmt.Println("Color mode not supported.")
-			os.Exit(1)
+			return "", errors.New("color mode not supported")
 		}
 	}
 	if outputMode == "box" {
@@ -163,8 +163,7 @@ func DrawPixels(c DrawConfig) (string, error) {
 
 	if isSaved {
 		if colored {
-			fmt.Println("Cannot save output in color mode.")
-			os.Exit(1)
+			return "", errors.New("cannot save output in color mode")
 		}
 
 		if !isPrinted {
@@ -189,10 +188,18 @@ func DrawPixels(c DrawConfig) (string, error) {
 					g = 255 - g
 					b = 255 - b
 				} else {
-					pixelLevel = len([]rune(pixelLevels)) - 1 - ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
+					scaledVal, err := ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
+					if err != nil {
+						return "", err
+					}
+
+					pixelLevel = len([]rune(pixelLevels)) - 1 - scaledVal
 				}
 			} else {
-				pixelLevel = ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
+				pixelLevel, err = ScaleValue(float64(l.Y), 0, 255, 0, float64(len([]rune(pixelLevels))-1))
+				if err != nil {
+					return "", err
+				}
 			}
 
 			if colored {

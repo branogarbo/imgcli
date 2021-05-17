@@ -35,7 +35,7 @@ func GetFileByUrl(url string) (io.ReadCloser, error) {
 
 // ScaleValue takes value and transforms(translation and scaling)
 // it according to its new, transformed bounds.
-func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
+func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) (int, error) {
 	var (
 		initRange     float64
 		finalRange    float64
@@ -45,8 +45,7 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 	)
 
 	if value > upperI || value < lowerI {
-		fmt.Println("Given value is out of the inital range")
-		os.Exit(1)
+		return 0, errors.New("given value is out of the inital range")
 	}
 
 	initRange = upperI - lowerI
@@ -61,7 +60,7 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) int {
 		scaledValue--
 	}
 
-	return int(scaledValue)
+	return int(scaledValue), nil
 }
 
 // ProcessFilePath returns the path of a unique destination file in the
