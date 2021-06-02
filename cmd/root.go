@@ -16,9 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"image"
-	"io"
-
 	"github.com/spf13/cobra"
 )
 
@@ -30,11 +27,7 @@ var (
 	asciiPattern string
 	src          string
 	dst          string
-	imgData      image.Image
-	imgWidth     int
-	imgHeight    int
 	err          error
-	img          io.ReadCloser
 	isQuiet      bool
 )
 

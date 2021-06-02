@@ -8,8 +8,10 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
+	"io/ioutil"
 	"os"
 	"runtime"
+	"strings"
 
 	"github.com/anthonynsimon/bild/transform"
 	"github.com/cheggaaa/pb/v3"
@@ -20,16 +22,17 @@ import (
 // It calls both ProcessImage and OutputImage.
 func OutputImage(c OutputConfig) (string, error) {
 	var (
-		src          string = c.Src
-		dst          string = c.Dst
-		outputMode   string = c.OutputMode
-		asciiPattern string = c.AsciiPattern
-		outputWidth  int    = c.OutputWidth
-		isUseWeb     bool   = c.IsUseWeb
-		isPrinted    bool   = c.IsPrinted
-		isSaved      bool   = c.IsSaved
-		isInverted   bool   = c.IsInverted
-		isQuiet      bool   = c.IsQuiet
+		src          = c.Src
+		dst          = c.Dst
+		outputMode   = c.OutputMode
+		asciiPattern = c.AsciiPattern
+		outputWidth  = c.OutputWidth
+		isUseWeb     = c.IsUseWeb
+		isPrinted    = c.IsPrinted
+		isSaved      = c.IsSaved
+		isInverted   = c.IsInverted
+		isQuiet      = c.IsQuiet
+		isSrcBytes   = c.IsSrcBytes
 	)
 
 	var (
@@ -44,6 +47,7 @@ func OutputImage(c OutputConfig) (string, error) {
 		Src:         src,
 		IsUseWeb:    isUseWeb,
 		OutputWidth: outputWidth,
+		IsSrcBytes:  isSrcBytes,
 	}
 
 	imgData, imgWidth, imgHeight, err = ProcessImage(processOptions)
@@ -75,9 +79,10 @@ func OutputImage(c OutputConfig) (string, error) {
 // ProcessImage returns the decoded image and its new dimensions. It is called by OutputImage.
 func ProcessImage(c ProcessConfig) (image.Image, int, int, error) {
 	var (
-		src         string = c.Src
-		isUseWeb    bool   = c.IsUseWeb
-		outputWidth int    = c.OutputWidth
+		src         = c.Src
+		isUseWeb    = c.IsUseWeb
+		outputWidth = c.OutputWidth
+		isSrcBytes  = c.IsSrcBytes
 	)
 
 	var (
@@ -91,7 +96,11 @@ func ProcessImage(c ProcessConfig) (image.Image, int, int, error) {
 	if isUseWeb {
 		img, err = GetFileByUrl(src)
 	} else {
-		img, err = GetFileByPath(src)
+		if isSrcBytes {
+			img = ioutil.NopCloser(strings.NewReader(src))
+		} else {
+			img, err = GetFileByPath(src)
+		}
 	}
 	if err != nil {
 		return nil, 0, 0, err
@@ -115,16 +124,16 @@ func ProcessImage(c ProcessConfig) (image.Image, int, int, error) {
 // be returned by ProcessImage and is called by OutputImage.
 func DrawPixels(c DrawConfig) (string, error) {
 	var (
-		imgData      image.Image = c.ImgData
-		imgWidth     int         = c.ImgWidth
-		imgHeight    int         = c.ImgHeight
-		isSaved      bool        = c.IsSaved
-		dst          string      = c.Dst
-		isInverted   bool        = c.IsInverted
-		outputMode   string      = c.OutputMode
-		asciiPattern string      = c.AsciiPattern
-		isPrinted    bool        = c.IsPrinted
-		isQuiet      bool        = c.IsQuiet
+		imgData      = c.ImgData
+		imgWidth     = c.ImgWidth
+		imgHeight    = c.ImgHeight
+		isSaved      = c.IsSaved
+		dst          = c.Dst
+		isInverted   = c.IsInverted
+		outputMode   = c.OutputMode
+		asciiPattern = c.AsciiPattern
+		isPrinted    = c.IsPrinted
+		isQuiet      = c.IsQuiet
 	)
 
 	var (

@@ -42,7 +42,6 @@ var saveCmd = &cobra.Command{
 			IsSaved:      true,
 			IsInverted:   isInverted,
 			AsciiPattern: asciiPattern,
-			IsPrinted:    false,
 			IsQuiet:      isQuiet,
 		}
 

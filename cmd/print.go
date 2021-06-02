@@ -31,7 +31,6 @@ var printCmd = &cobra.Command{
 			OutputMode:   outputMode,
 			OutputWidth:  outputWidth,
 			IsUseWeb:     isUseWeb,
-			IsSaved:      false,
 			IsInverted:   isInverted,
 			AsciiPattern: asciiPattern,
 			IsPrinted:    true,

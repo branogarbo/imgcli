@@ -28,12 +28,14 @@ type OutputConfig struct {
 	IsSaved      bool
 	IsQuiet      bool
 	IsInverted   bool
+	IsSrcBytes   bool
 }
 
 type ProcessConfig struct {
 	Src         string
 	IsUseWeb    bool
 	OutputWidth int
+	IsSrcBytes  bool
 }
 
 type DrawConfig struct {
