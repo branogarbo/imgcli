@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"github.com/branogarbo/imgcli/util"
 	"github.com/spf13/cobra"
 )
 
@@ -50,7 +51,7 @@ func init() {
 func AddOutputFlags(cmd *cobra.Command) {
 	cmd.Flags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
 	cmd.Flags().BoolVarP(&isInverted, "invert", "i", false, "Whether or not the the print will be inverted")
-	cmd.Flags().StringVarP(&outputMode, "mode", "m", "ascii", "he mode the image will be printed in")
-	cmd.Flags().IntVarP(&outputWidth, "width", "w", 100, "The number of characters in each row of the output")
-	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", " .:-=+*#%@", "The pattern of ascii characters from least to greatest visibility")
+	cmd.Flags().StringVarP(&outputMode, "mode", "m", util.DefaultMode, "he mode the image will be printed in")
+	cmd.Flags().IntVarP(&outputWidth, "width", "w", util.DefaultWidth, "The number of characters in each row of the output")
+	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", util.DefaultPattern, "The pattern of ascii characters from least to greatest visibility")
 }

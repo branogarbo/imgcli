@@ -11,5 +11,5 @@ require (
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/spf13/cobra v1.1.3
-	golang.org/x/sys v0.0.0-20210601080250-7ecdf8ef093b // indirect
+	golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40 // indirect
 )

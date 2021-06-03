@@ -13,6 +13,11 @@ var saveCmd = &cobra.Command{
 	Example: `imgcli save -w 200 -W "https://url-to-some/image.jpg"`,
 	Args:    cobra.MaximumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("please provide an image source")
+			return
+		}
+
 		src = args[0]
 
 		if len(args) == 2 {

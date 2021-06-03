@@ -46,14 +46,13 @@ imgcli print --invert ./images/pic.jpg
 imgcli save -w 200 -W "https://url-to-some/image.jpg"
 
 Flags:
-  -h, --help           Help for command
+  -p, --ascii string   The pattern of ascii characters from least to greatest visibility (default " .,*/(#%&@")
+  -h, --help           help for save
   -i, --invert         Whether or not the the print will be inverted
-  -m, --mode string    The mode the image will be printed in (default "ascii")
+  -m, --mode string    he mode the image will be printed in (default "ascii")
+  -q, --quiet          Whether or not the save output is quiet
   -W, --web            Whether the source image is in the filesystem or fetched from the web
   -w, --width int      The number of characters in each row of the output (default 100)
-  -q, --quiet          Whether or not the save output is quiet (Does not matter for print command)
-  -p, --ascii string   The pattern of ascii characters from least to greatest 
-                       visibility (Does not matter for non-ascii modes) (default " .:-=+*#%@")
 
 Use "imgcli [command] --help" for more information about a command.
 ```
@@ -82,7 +81,7 @@ func main() {
 		Src:          "https://github.com/branogarbo/imgcli/blob/master/examples/images/portrait.jpg?raw=true",
 		OutputMode:   "ascii",
 		AsciiPattern: " .:-=+*#%@",
-		OutputWidth:  100,
+		OutputWidth:  200,
 		IsUseWeb:     true,
 	}
 
