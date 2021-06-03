@@ -18,12 +18,6 @@ import (
 	printColor "github.com/gookit/color"
 )
 
-const (
-	DefaultMode    = "ascii"
-	DefaultPattern = " .,*/(#%&@"
-	DefaultWidth   = 100
-)
-
 // OutputImage is the high level and preferred method for generating a print.
 // It calls both ProcessImage and OutputImage.
 func OutputImage(c OutputConfig) (string, error) {
@@ -48,6 +42,16 @@ func OutputImage(c OutputConfig) (string, error) {
 		pixelString string
 		err         error
 	)
+
+	if outputMode == "" {
+		outputMode = DefaultMode
+	}
+	if outputWidth == 0 {
+		outputWidth = DefaultWidth
+	}
+	if asciiPattern == "" {
+		asciiPattern = DefaultPattern
+	}
 
 	processOptions := ProcessConfig{
 		Src:         src,
@@ -140,7 +144,6 @@ func DrawPixels(c DrawConfig) (string, error) {
 		asciiPattern = c.AsciiPattern
 		isPrinted    = c.IsPrinted
 		isQuiet      = c.IsQuiet
-		outputWidth  = c.OutputWidth
 	)
 
 	var (
@@ -154,17 +157,8 @@ func DrawPixels(c DrawConfig) (string, error) {
 		err         error
 	)
 
-	if asciiPattern == "" {
-		asciiPattern = DefaultPattern
-	}
-	if outputWidth == 0 {
-		outputWidth = DefaultWidth
-	}
-
 	// 1. have all option logic (ex: cant save in color mode)
 	switch outputMode {
-	case "":
-		outputMode = DefaultMode
 	case "ascii":
 	case "color":
 	case "box":
