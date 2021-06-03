@@ -17,6 +17,12 @@ package util
 
 import "image"
 
+const (
+	DefaultMode    = "ascii"
+	DefaultPattern = " .,*/(#%&@"
+	DefaultWidth   = 100
+)
+
 type OutputConfig struct {
 	Src          string
 	Dst          string
