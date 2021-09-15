@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/branogarbo/imgcli/util"
 	"github.com/spf13/cobra"
@@ -12,13 +12,13 @@ var saveCmd = &cobra.Command{
 	Short:   "Saves output image to a text file.",
 	Example: `imgcli save -w 200 -W "https://url-to-some/image.jpg"`,
 	Args:    cobra.MaximumNArgs(2),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			fmt.Println("please provide an image source")
-			return
+			return errors.New("image source not provided")
 		}
 
-		src = args[0]
+		src := args[0]
+		var dst string
 
 		if len(args) == 2 {
 			dst = args[1]
@@ -26,17 +26,12 @@ var saveCmd = &cobra.Command{
 			dst = "./print.txt"
 		}
 
-		outputMode, err = cmd.Flags().GetString("mode")
-		outputWidth, err = cmd.Flags().GetInt("width")
-		isUseWeb, err = cmd.Flags().GetBool("web")
-		isInverted, err = cmd.Flags().GetBool("invert")
-		asciiPattern, err = cmd.Flags().GetString("ascii")
-		isQuiet, err = cmd.Flags().GetBool("quiet")
-
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		outputMode, _ := cmd.Flags().GetString("mode")
+		outputWidth, _ := cmd.Flags().GetInt("width")
+		isUseWeb, _ := cmd.Flags().GetBool("web")
+		isInverted, _ := cmd.Flags().GetBool("invert")
+		asciiPattern, _ := cmd.Flags().GetString("ascii")
+		isQuiet, _ := cmd.Flags().GetBool("quiet")
 
 		options := util.OutputConfig{
 			Src:          src,
@@ -50,11 +45,8 @@ var saveCmd = &cobra.Command{
 			IsQuiet:      isQuiet,
 		}
 
-		_, err = util.OutputImage(options)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		_, err := util.OutputImage(options)
+		return err
 	},
 }
 

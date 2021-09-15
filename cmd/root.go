@@ -20,18 +20,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	isUseWeb     bool
-	isInverted   bool
-	outputMode   string
-	outputWidth  int
-	asciiPattern string
-	src          string
-	dst          string
-	err          error
-	isQuiet      bool
-)
-
 var rootCmd = &cobra.Command{
 	Use:   "imgcli",
 	Short: "A simple tool written in Go that prints images to the command line and more.",
@@ -45,13 +33,13 @@ func init() {
 	AddOutputFlags(printCmd)
 	AddOutputFlags(saveCmd)
 
-	saveCmd.Flags().BoolVarP(&isQuiet, "quiet", "q", false, "Whether or not the save output is quiet")
+	saveCmd.Flags().BoolP("quiet", "q", false, "Whether or not the save output is quiet")
 }
 
 func AddOutputFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&isUseWeb, "web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
-	cmd.Flags().BoolVarP(&isInverted, "invert", "i", false, "Whether or not the the print will be inverted")
-	cmd.Flags().StringVarP(&outputMode, "mode", "m", u.DefaultMode, "he mode the image will be printed in")
-	cmd.Flags().IntVarP(&outputWidth, "width", "w", u.DefaultWidth, "The number of characters in each row of the output")
-	cmd.Flags().StringVarP(&asciiPattern, "ascii", "p", u.DefaultPattern, "The pattern of ascii characters from least to greatest visibility")
+	cmd.Flags().BoolP("web", "W", false, "Whether the source image is in the filesystem or fetched from the web")
+	cmd.Flags().BoolP("invert", "i", false, "Whether or not the the print will be inverted")
+	cmd.Flags().StringP("mode", "m", u.DefaultMode, "he mode the image will be printed in")
+	cmd.Flags().IntP("width", "w", u.DefaultWidth, "The number of characters in each row of the output")
+	cmd.Flags().StringP("ascii", "p", u.DefaultPattern, "The pattern of ascii characters from least to greatest visibility")
 }
