@@ -27,11 +27,12 @@ Usage:
 
 Available Commands:
   help        Help about any command
-  print       Prints images to the command line   
-  save        Saves converted image to a text file
+  print       Prints output to the command line.
+  save        Saves output image to a text file.
 
 Flags:
-  -h, --help   help for imgcli
+  -h, --help      help for imgcli
+  -v, --version   version for imgcli
 
 Use "imgcli [command] --help" for more information about a command.
 ```
