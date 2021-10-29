@@ -22,7 +22,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:     "imgcli",
-	Version: "v1.28.4",
+	Version: "v1.29.0",
 	Short:   "A simple tool written in Go that prints images to the command line and more.",
 }
 
