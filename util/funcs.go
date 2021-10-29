@@ -27,7 +27,9 @@ func GetFileByUrl(url string) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	} else if res.StatusCode != 200 {
-		return nil, errors.New("bad Src provided")
+		msg := fmt.Sprintf("bad Src provided, image fetch returned status code of: %d", res.StatusCode)
+
+		return nil, errors.New(msg)
 	}
 
 	return res.Body, nil

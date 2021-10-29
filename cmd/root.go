@@ -21,8 +21,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "imgcli",
-	Short: "A simple tool written in Go that prints images to the command line and more.",
+	Use:     "imgcli",
+	Version: "v1.28.4",
+	Short:   "A simple tool written in Go that prints images to the command line and more.",
 }
 
 func Execute() {
