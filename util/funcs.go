@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"os"
 	"path"
@@ -51,18 +52,14 @@ func ScaleValue(value, lowerI, upperI, lowerF, upperF float64) (int, error) {
 	}
 
 	initRange = upperI - lowerI
-	finalRange = upperF - lowerF + 1
+	finalRange = upperF - lowerF
 
-	rangeScale = finalRange / initRange
 	relativeValue = value - lowerI
+	rangeScale = finalRange / initRange
 
-	scaledValue = relativeValue*rangeScale + lowerF
+	scaledValue = rangeScale*relativeValue + lowerF
 
-	if scaledValue == upperF+1 {
-		scaledValue--
-	}
-
-	return int(scaledValue), nil
+	return int(math.Round(scaledValue)), nil
 }
 
 // ProcessFilePath returns the path of a unique destination file in the

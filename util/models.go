@@ -19,7 +19,7 @@ import "image"
 
 const (
 	DefaultMode    = "ascii"
-	DefaultPattern = " .,*/(#%&@"
+	DefaultPattern = " .,:(/*%&#@"
 	DefaultWidth   = 100
 )
 

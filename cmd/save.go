@@ -10,7 +10,7 @@ import (
 var saveCmd = &cobra.Command{
 	Use:     "save",
 	Short:   "Saves output image to a text file.",
-	Example: `imgcli save -w 200 -W "https://url-to-some/image.jpg"`,
+	Example: `imgcli save -w 200 -W https://url-to-some/image.jpg`,
 	Args:    cobra.MaximumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
