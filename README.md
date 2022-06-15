@@ -44,10 +44,10 @@ Usage:
 
 Examples:
 imgcli print --invert ./images/pic.jpg
-imgcli save -w 200 -W "https://url-to-some/image.jpg"
+imgcli save -w 200 -W https://url-to-some/image.jpg
 
 Flags:
-  -p, --ascii string   The pattern of ascii characters from least to greatest visibility (default " .,*/(#%&@")
+  -p, --ascii string   The pattern of ascii characters from least to greatest visibility (default " .,:(/*%&#@")
   -h, --help           help for save
   -i, --invert         Whether or not the the print will be inverted
   -m, --mode string    he mode the image will be printed in (default "ascii")
